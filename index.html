@@ -540,13 +540,13 @@ sup.fnref a:hover{text-decoration:underline}
    <div class="ap-title"><span>Read aloud <em id="lEngine" style="color:var(--ink-soft)"></em></span><span class="ap-pos" id="lPos">¶ — / 245</span></div>
    <div class="ap-rail" id="lRail"><div class="ap-fill" id="lFill"></div></div>
  </div>
- <button class="ap-cfg" id="lCfg">Voice</button>
+ <button class="ap-cfg" id="lCfg">Settings</button>
  <button class="ap-close" id="lClose">&times;</button>
 </div>
 <div id="listenCfg">
- <div class="row"><label for="voiceSel">Voice</label><select id="voiceSel"></select></div>
- <div class="row"><label for="rateSel">Speed <span id="rateVal">1.0×</span></label><input type="range" id="rateSel" min="0.7" max="1.5" step="0.05" value="1"></div>
- <div class="note-mini">This uses your device's built-in voices (offline, private). An <b>authentic Pope Leo XIV voice is not available</b> as a tool — cloning a real person's voice without consent is off-limits. If an official narration recording is ever released, drop it in as <code>audio/magnifica-narration.mp3</code> and this player will use it automatically.</div>
+ <div class="row" id="voiceRow"><label for="voiceSel">Voice</label><select id="voiceSel"></select></div>
+ <div class="row"><label for="rateSel">Speed <span id="rateVal">1.0×</span></label><input type="range" id="rateSel" min="0.7" max="2" step="0.05" value="1"></div>
+ <div class="note-mini" id="voiceNote">This uses your device's built-in voices (offline, private). An <b>authentic Pope Leo XIV voice is not available</b> as a tool — cloning a real person's voice without consent is off-limits. If an official narration recording is ever released, drop it in as <code>audio/magnifica-narration.mp3</code> and this player will use it automatically.</div>
 </div>
 
 <!-- note editor modal -->
@@ -1026,64 +1026,207 @@ $('#sNext').onclick=()=>{if(hits.length){hi=(hi+1)%hits.length;markCur()}};
 $('#sPrev').onclick=()=>{if(hits.length){hi=(hi-1+hits.length)%hits.length;markCur()}};
 si.addEventListener('keydown',e=>{if(e.key==='Enter'){e.shiftKey?$('#sPrev').click():$('#sNext').click()}if(e.key==='Escape')closeSearch()});
 
-/* ---------- read aloud (Web Speech + optional narration file) ---------- */
-const listen=$('#listen');let speaking=false,readIdx=0,voices=[],narration=null,usingFile=false;
-const lPlay=$('#lPlay');
+/* ---------- read aloud (Web Speech fallback + optional narration file) ---------- */
+// One controller, two engines. The controller owns all UI sync (play/pause icon,
+// fill bar, position label) and delegates engine-specific work to internal
+// helpers. The shared button handlers always go through the controller, so
+// there is one state machine instead of two parallel ones.
+const listen=$('#listen');
+const lPlay=$('#lPlay'),lFill=$('#lFill'),lPos=$('#lPos'),lEngine=$('#lEngine');
+let voices=[];
+
 function paraNums(){return paraEls.map(p=>+p.dataset.n)}
-function openListen(){listen.classList.add('open');$('#btnListen').classList.add('on');
-  // start at current paragraph
-  const nums=paraNums();readIdx=Math.max(0,nums.indexOf(curPara));updateListenUI();
+function fmtTime(s){
+  if(!isFinite(s)||s<0)s=0;
+  const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=Math.floor(s%60);
+  const pad=n=>n.toString().padStart(2,'0');
+  return h?`${h}:${pad(m)}:${pad(sec)}`:`${m}:${pad(sec)}`;
 }
-function closeListen(){stopSpeak();listen.classList.remove('open');$('#listenCfg').classList.remove('show');$('#btnListen').classList.remove('on')}
+
+const Player={
+  engine:'speech',     // 'speech' | 'narration'
+  state:'idle',        // 'idle' | 'playing' | 'paused'
+  audio:null,          // HTMLAudioElement when engine==='narration'
+  readIdx:0,           // current paragraph index (speech engine)
+  rate:+store.get('rate',1),
+
+  setEngine(engine,audio){
+    // Stop whatever's running on the old engine before swapping.
+    if('speechSynthesis'in window)speechSynthesis.cancel();
+    $$('.para.active-read').forEach(p=>p.classList.remove('active-read'));
+    if(this.audio&&this.audio!==audio){this.audio.pause();this.audio.ontimeupdate=this.audio.onplay=this.audio.onpause=this.audio.onended=null}
+    this.engine=engine; this.audio=audio||null; this.state='idle';
+    if(audio){
+      audio.playbackRate=this.rate;
+      audio.onplay   =()=>this._setState('playing');
+      audio.onpause  =()=>this._setState(audio.ended?'idle':'paused');
+      audio.onended  =()=>this._setState('idle');
+      audio.ontimeupdate=()=>this._syncPos();
+      lEngine.textContent='· official narration';
+      $('#voiceRow').style.display='none';
+      $('#voiceNote').innerHTML='Plays the bundled 4-hour narration (Kokoro <i>bm_george</i>, 32 kbps mono, with chapter markers). Speed below adjusts playback rate; everything stays on your device.';
+    }else{
+      lEngine.textContent='speechSynthesis'in window?'· device voice':'';
+      $('#voiceRow').style.display='';
+    }
+    this._syncUI();
+  },
+
+  _setState(state){
+    this.state=state;
+    lPlay.classList.toggle('playing',state==='playing');
+  },
+
+  _syncPos(){
+    if(this.engine==='narration'&&this.audio){
+      const a=this.audio,d=isFinite(a.duration)?a.duration:0;
+      lFill.style.width=(d?(a.currentTime/d*100):0)+'%';
+      lPos.textContent=fmtTime(a.currentTime)+' / '+fmtTime(d);
+    }else{
+      const nums=paraNums(),n=nums[this.readIdx],last=nums[nums.length-1];
+      lPos.textContent='¶ '+(n||'—')+' / '+last;
+      lFill.style.width=(nums.length?((this.readIdx+1)/nums.length*100):0)+'%';
+    }
+  },
+
+  _syncUI(){this._setState(this.state);this._syncPos()},
+
+  _highlight(){
+    $$('.para.active-read').forEach(p=>p.classList.remove('active-read'));
+    const n=paraNums()[this.readIdx],el=n&&$('#p'+n);
+    if(el){el.classList.add('active-read');el.scrollIntoView({behavior:'smooth',block:'center'})}
+  },
+
+  _speakCurrent(){
+    if(!('speechSynthesis'in window)){toast('Read-aloud needs a browser with speech support');this._setState('idle');return}
+    const nums=paraNums();
+    if(this.readIdx>=nums.length){this._setState('idle');return}
+    this._highlight();this._syncPos();
+    const el=$('#p'+nums[this.readIdx]),text=$('.para-body',el).textContent;
+    const u=new SpeechSynthesisUtterance(text);
+    const vname=store.get('voice',''),v=voices.find(x=>x.name===vname);
+    if(v)u.voice=v;
+    u.lang=(v&&v.lang)||'en-US';
+    u.rate=this.rate;
+    u.onend=()=>{
+      if(this.state!=='playing')return;
+      this.readIdx++;
+      if(this.readIdx<nums.length)this._speakCurrent();
+      else{this._setState('idle');$$('.para.active-read').forEach(p=>p.classList.remove('active-read'))}
+    };
+    speechSynthesis.speak(u);
+  },
+
+  async playPause(){
+    if(this.engine==='narration'&&this.audio){
+      if(this.audio.paused){
+        try{await this.audio.play()}
+        catch(e){this._setState('paused');toast('Tap play again to start audio')}
+      }else this.audio.pause();
+    }else{
+      if(this.state==='playing'){this._setState('paused');if('speechSynthesis'in window)speechSynthesis.cancel()}
+      else{this._setState('playing');if('speechSynthesis'in window)speechSynthesis.cancel();this._speakCurrent()}
+    }
+  },
+
+  stop(){
+    if(this.engine==='narration'&&this.audio){
+      this.audio.pause();   // preserve currentTime so reopen resumes in place
+    }else{
+      if('speechSynthesis'in window)speechSynthesis.cancel();
+      $$('.para.active-read').forEach(p=>p.classList.remove('active-read'));
+      this._setState('idle');
+    }
+  },
+
+  seekPct(pct){
+    pct=Math.max(0,Math.min(1,pct));
+    if(this.engine==='narration'&&this.audio&&isFinite(this.audio.duration)){
+      this.audio.currentTime=pct*this.audio.duration;
+      this._syncPos();
+    }else{
+      const nums=paraNums();
+      this.readIdx=Math.max(0,Math.min(nums.length-1,Math.floor(pct*nums.length)));
+      if(this.state==='playing'){speechSynthesis.cancel();this._speakCurrent()}
+      else{this._highlight();this._syncPos()}
+    }
+  },
+
+  skip(deltaSec){
+    if(this.engine==='narration'&&this.audio){
+      const d=isFinite(this.audio.duration)?this.audio.duration:0;
+      this.audio.currentTime=Math.max(0,Math.min(d,this.audio.currentTime+deltaSec));
+      this._syncPos();
+    }else{
+      const nums=paraNums(),dir=deltaSec>=0?1:-1;
+      this.readIdx=Math.max(0,Math.min(nums.length-1,this.readIdx+dir));
+      if(this.state==='playing'){speechSynthesis.cancel();this._speakCurrent()}
+      else{this._highlight();this._syncPos()}
+    }
+  },
+
+  setRate(rate){
+    this.rate=+rate||1;
+    store.set('rate',this.rate);
+    if(this.engine==='narration'&&this.audio)this.audio.playbackRate=this.rate;
+    else if(this.state==='playing'){speechSynthesis.cancel();this._speakCurrent()}
+  },
+
+  setReadIdxToCurrentParagraph(){
+    if(this.engine!=='speech')return;
+    const nums=paraNums();
+    this.readIdx=Math.max(0,nums.indexOf(curPara));
+    this._syncPos();
+  },
+};
+// Bootstrap with the speech engine; probeNarration() may upgrade later.
+Player.setEngine('speech',null);
+
+function openListen(){
+  listen.classList.add('open');$('#btnListen').classList.add('on');
+  Player.setReadIdxToCurrentParagraph();
+  Player._syncPos();
+}
+function closeListen(){
+  Player.stop();
+  listen.classList.remove('open');
+  $('#listenCfg').classList.remove('show');
+  $('#btnListen').classList.remove('on');
+}
 $('#btnListen').onclick=()=>listen.classList.contains('open')?closeListen():openListen();
 $('#lClose').onclick=closeListen;
 $('#lCfg').onclick=()=>$('#listenCfg').classList.toggle('show');
-function updateListenUI(){
-  const nums=paraNums();const n=nums[readIdx];
-  $('#lPos').textContent='¶ '+(n||'—')+' / '+nums[nums.length-1];
-  $('#lFill').style.width=((readIdx+1)/nums.length*100)+'%';
-}
-function highlightRead(){
-  $$('.para.active-read').forEach(p=>p.classList.remove('active-read'));
-  const n=paraNums()[readIdx];const el=$('#p'+n);
-  if(el){el.classList.add('active-read');el.scrollIntoView({behavior:'smooth',block:'center'})}
-}
-function speakCurrent(){
-  if(!('speechSynthesis'in window)){toast('Read-aloud needs a browser with speech support');return}
-  const nums=paraNums();if(readIdx>=nums.length){stopSpeak();return}
-  highlightRead();updateListenUI();
-  const el=$('#p'+nums[readIdx]);const text=$('.para-body',el).textContent;
-  const u=new SpeechSynthesisUtterance(text);
-  const vname=store.get('voice','');const v=voices.find(x=>x.name===vname);if(v)u.voice=v;u.lang=(v&&v.lang)||'en-US';
-  u.rate=+store.get('rate',1);
-  u.onend=()=>{if(speaking){readIdx++;if(readIdx<nums.length)speakCurrent();else stopSpeak()}};
-  speechSynthesis.speak(u);
-}
-function startSpeak(){speaking=true;lPlay.classList.add('playing');$('#lEngine').textContent='· device voice';speechSynthesis.cancel();speakCurrent()}
-function pauseSpeak(){speaking=false;lPlay.classList.remove('playing');speechSynthesis.cancel()}
-function stopSpeak(){speaking=false;lPlay.classList.remove('playing');if('speechSynthesis'in window)speechSynthesis.cancel();$$('.para.active-read').forEach(p=>p.classList.remove('active-read'))}
-lPlay.onclick=()=>{if(usingFile){return}speaking?pauseSpeak():startSpeak()};
-$('#lNext').onclick=()=>{readIdx=Math.min(paraNums().length-1,readIdx+1);if(speaking){speechSynthesis.cancel();speakCurrent()}else{highlightRead();updateListenUI()}};
-$('#lPrev').onclick=()=>{readIdx=Math.max(0,readIdx-1);if(speaking){speechSynthesis.cancel();speakCurrent()}else{highlightRead();updateListenUI()}};
-$('#lRail').onclick=e=>{const r=e.currentTarget.getBoundingClientRect();const pct=(e.clientX-r.left)/r.width;readIdx=Math.floor(pct*paraNums().length);if(speaking){speechSynthesis.cancel();speakCurrent()}else{highlightRead();updateListenUI()}};
+lPlay.onclick=()=>Player.playPause();
+$('#lNext').onclick=()=>Player.skip(+30);
+$('#lPrev').onclick=()=>Player.skip(-30);
+$('#lRail').onclick=e=>{const r=e.currentTarget.getBoundingClientRect();Player.seekPct((e.clientX-r.left)/r.width)};
+
 function loadVoices(){
   if(!('speechSynthesis'in window))return;
   voices=speechSynthesis.getVoices();
-  const sel=$('#voiceSel');const pref=voices.filter(v=>/^en/i.test(v.lang));const list=pref.length?pref:voices;
+  const sel=$('#voiceSel'),pref=voices.filter(v=>/^en/i.test(v.lang)),list=pref.length?pref:voices;
   sel.innerHTML=list.map(v=>`<option value="${v.name}">${v.name} (${v.lang})</option>`).join('');
-  const saved=store.get('voice','');if(saved&&list.some(v=>v.name===saved))sel.value=saved;else if(list[0]){store.set('voice',list[0].name)}
+  const saved=store.get('voice','');
+  if(saved&&list.some(v=>v.name===saved))sel.value=saved;
+  else if(list[0])store.set('voice',list[0].name);
 }
 if('speechSynthesis'in window){speechSynthesis.onvoiceschanged=loadVoices;loadVoices()}
-$('#voiceSel').onchange=e=>{store.set('voice',e.target.value);if(speaking){speechSynthesis.cancel();speakCurrent()}};
-$('#rateSel').oninput=e=>{store.set('rate',e.target.value);$('#rateVal').textContent=(+e.target.value).toFixed(2)+'×'};
-$('#rateSel').value=store.get('rate',1);$('#rateVal').textContent=(+store.get('rate',1)).toFixed(2)+'×';
-// optional official narration file (graceful)
+$('#voiceSel').onchange=e=>{store.set('voice',e.target.value);if(Player.engine==='speech'&&Player.state==='playing'){speechSynthesis.cancel();Player._speakCurrent()}};
+$('#rateSel').oninput=e=>{$('#rateVal').textContent=(+e.target.value).toFixed(2)+'×';Player.setRate(e.target.value)};
+$('#rateSel').value=Player.rate;$('#rateVal').textContent=Player.rate.toFixed(2)+'×';
+
+// Probe for an official narration file and upgrade the engine when ready.
+// canplaythrough may never fire on slow networks or mobile Safari for a
+// long MP3, so fall back to loadedmetadata + a small delay.
 (function probeNarration(){
-  const a=new Audio();a.src='audio/magnifica-narration.mp3';
-  a.addEventListener('canplaythrough',()=>{usingFile=true;narration=a;$('#lEngine').textContent='· official narration';
-    lPlay.onclick=()=>{if(a.paused){a.play();lPlay.classList.add('playing')}else{a.pause();lPlay.classList.remove('playing')}};
-    a.ontimeupdate=()=>{if(a.duration)$('#lFill').style.width=(a.currentTime/a.duration*100)+'%'};
+  const a=new Audio();a.preload='metadata';a.src='audio/magnifica-narration.mp3';
+  let upgraded=false;
+  const upgrade=()=>{if(upgraded)return;upgraded=true;Player.setEngine('narration',a)};
+  a.addEventListener('canplaythrough',upgrade,{once:true});
+  a.addEventListener('loadedmetadata',()=>{
+    if(isFinite(a.duration)&&a.duration>60)setTimeout(upgrade,1500);
   },{once:true});
+  a.addEventListener('error',()=>{/* file absent or blocked — stay on speech */},{once:true});
   a.load();
 })();
 
