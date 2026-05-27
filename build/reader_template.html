@@ -135,6 +135,10 @@ html[data-theme="night"] .cover h1{filter:drop-shadow(0 1px 10px color-mix(in sr
 .stat b{display:block;font-family:var(--display);font-size:30px;font-weight:600;color:var(--accent);line-height:1}
 .stat span{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-top:4px;display:block}
 .cover-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:34px}
+.restart-link{background:none;border:0;cursor:pointer;margin:14px auto 0;padding:4px 10px;
+  font-family:var(--script);font-style:italic;font-size:13.5px;color:var(--ink-soft);
+  letter-spacing:.01em;transition:color .2s}
+.restart-link:hover{color:var(--gold-deep);text-decoration:underline;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,var(--gold) 50%,transparent)}
 .btn{font-family:var(--ui);font-size:13.5px;font-weight:600;letter-spacing:.03em;padding:13px 26px;border-radius:40px;cursor:pointer;
   border:1px solid var(--gold-deep);background:var(--grad-gold);color:#3a2c08;transition:all .18s;display:inline-flex;align-items:center;gap:8px;
   box-shadow:0 4px 14px color-mix(in srgb,var(--gold-deep) 22%,transparent)}
@@ -645,6 +649,7 @@ function render(){
       <a class="btn ghost" href="magnifica-humanitas.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><path d="M9 13h6M9 17h6"/></svg> Official PDF</a>
       <a class="btn ghost" href="${m.video}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20 6 4"/></svg> Watch the signing</a>
     </div>
+    <button class="restart-link" id="restartBtn" style="display:none">Begin again from the first paragraph</button>
     <div class="langrow">Read the official text · ${langs}</div>
     <div class="scrolltip">scroll &#8595;</div>`;
   doc.appendChild(cover);
@@ -1347,8 +1352,19 @@ $('#beginBtn').onclick=()=>{const f=chapters[0];if(f)f.el.scrollIntoView({behavi
 })();
 // resume
 const last=store.get('last',0);
-if(last>1){const rb=$('#resumeBtn');rb.style.display='inline-flex';rb.innerHTML='Resume at ¶'+last;rb.onclick=()=>goPara(last);
-  setTimeout(()=>toast('Welcome back — continue at ¶'+last,'Resume',()=>goPara(last)),700);}
+if(last>1){
+  const rb=$('#resumeBtn'),restart=$('#restartBtn');
+  rb.style.display='inline-flex';rb.innerHTML='Resume at ¶'+last;rb.onclick=()=>goPara(last);
+  restart.style.display='inline-block';
+  restart.onclick=()=>{
+    store.set('last',0);
+    rb.style.display='none';restart.style.display='none';
+    $('#toast').classList.remove('show');   // dismiss the welcome-back toast if still up
+    window.scrollTo({top:0,behavior:'smooth'});
+    toast('Reading position cleared — start whenever you like.');
+  };
+  setTimeout(()=>toast('Welcome back — continue at ¶'+last,'Resume',()=>goPara(last)),700);
+}
 </script>
 </body>
 </html>
