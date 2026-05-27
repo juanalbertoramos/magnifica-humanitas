@@ -5,9 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Magnifica Humanitas — A Reader's Edition</title>
 <meta name="description" content="A beautiful, self-guided reading edition of Pope Leo XIV's first encyclical, Magnifica Humanitas, with notes, highlights, read-aloud and offline study tools.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Self-hosted fonts (vendored from Google Fonts so the reader doesn't leak
+   visits to a third party and stays genuinely offline-capable). Each WOFF2
+   below is a variable font covering the weight range we use, so one file
+   per family/style combination — total ~250 KB. */
+@font-face{font-family:"Cinzel";font-style:normal;font-weight:400 700;font-display:swap;
+  src:url(fonts/cinzel.woff2) format("woff2")}
+@font-face{font-family:"Cinzel Decorative";font-style:normal;font-weight:700;font-display:swap;
+  src:url(fonts/cinzel-decorative-700.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:400 600;font-display:swap;
+  src:url(fonts/cormorant-garamond.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:italic;font-weight:400 600;font-display:swap;
+  src:url(fonts/cormorant-garamond-italic.woff2) format("woff2")}
+@font-face{font-family:"EB Garamond";font-style:normal;font-weight:400 500;font-display:swap;
+  src:url(fonts/eb-garamond.woff2) format("woff2")}
+@font-face{font-family:"EB Garamond";font-style:italic;font-weight:400 500;font-display:swap;
+  src:url(fonts/eb-garamond-italic.woff2) format("woff2")}
+@font-face{font-family:"Inter";font-style:normal;font-weight:400 600;font-display:swap;
+  src:url(fonts/inter.woff2) format("woff2")}
+</style>
 <style>
 /* ───────────────────────── THEME TOKENS ───────────────────────── */
 :root{
