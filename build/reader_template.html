@@ -639,6 +639,10 @@ sup.fnref a:hover{text-decoration:underline}
 <script id="docdata" type="application/json">__DOC_JSON__</script>
 <script>
 "use strict";
+// Disable Chrome's automatic scroll-restoration on reload. Without this, a
+// restored-scroll event can fire onScroll before render() populates paraEls,
+// leaving curPara stuck and breaking the resume persistence. (Codex finding.)
+if('scrollRestoration' in history) history.scrollRestoration='manual';
 const DOC = JSON.parse(document.getElementById('docdata').textContent);
 const NS='mh2026:';
 const $=(s,r=document)=>r.querySelector(s);
@@ -1031,7 +1035,7 @@ function buildTOC(){
 }
 
 /* ---------- scrollspy + progress + resume ---------- */
-const doc=$('#doc');let curPara=1,_highMark=store.get('last',0);
+const doc=$('#doc');let curPara=1,_highMark=store.get('last',0),_inText=false;
 function onScroll(){
   const st=window.scrollY,h=document.documentElement.scrollHeight-window.innerHeight;
   const pct=Math.min(100,Math.max(0,st/h*100));
@@ -1040,12 +1044,12 @@ function onScroll(){
   // current paragraph = last para whose top is above 40% viewport
   const mid=window.innerHeight*0.32;let cur=null,curC=null,curS=null;
   for(const p of paraEls){const r=p.getBoundingClientRect();if(r.top<=mid)cur=p;else break;}
-  if(cur){curPara=+cur.dataset.n}
+  if(cur){curPara=+cur.dataset.n;_inText=true}
   // Persist as a monotonic high-water mark: only advance, never decrease.
-  // Walking back up to the cover therefore can't clobber the furthest point
-  // reached this session, and the persist doesn't rely on pagehide /
-  // visibilitychange firing reliably (Chrome bfcache and iOS Safari skip them).
-  if(curPara>_highMark&&curPara>1){_highMark=curPara;store.set('last',curPara)}
+  // _inText becomes true the first time the scrollspy locates a paragraph
+  // above the mid-line, so we don't write last=1 just because the page
+  // booted with the initial curPara of 1 and no real scroll happened yet.
+  if(_inText&&curPara>_highMark){_highMark=curPara;store.set('last',curPara)}
   // active chapter/section
   let ac=null,as=null;
   for(const c of chapters){if(c.el.getBoundingClientRect().top<=mid)ac=c.id}
@@ -1055,12 +1059,12 @@ function onScroll(){
 }
 let paraEls=[];
 let ticking=false;
-window.addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(()=>{onScroll();ticking=false});ticking=true}},{passive:true});
+window.addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(()=>{try{onScroll()}finally{ticking=false}});ticking=true}},{passive:true});
 
 // Belt-and-suspenders backup to the high-water-mark write inside onScroll:
 // if the user has somehow advanced curPara without an onScroll tick firing,
 // catch it on tab-exit. Still monotonic — never downgrade the stored value.
-function persistLast(){if(curPara>_highMark&&curPara>1){_highMark=curPara;store.set('last',curPara)}}
+function persistLast(){if(_inText&&curPara>_highMark){_highMark=curPara;store.set('last',curPara)}}
 window.addEventListener('pagehide',persistLast);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')persistLast()});
 $('#topBtn').onclick=()=>{
@@ -1445,7 +1449,7 @@ $('#beginBtn').onclick=()=>{const f=chapters[0];if(f)f.el.scrollIntoView({behavi
 })();
 // resume
 const last=store.get('last',0);
-if(last>1){
+if(last>=1){
   const rb=$('#resumeBtn'),restart=$('#restartBtn');
   rb.style.display='inline-flex';rb.innerHTML='Resume at ¶'+last;rb.onclick=()=>goPara(last);
   restart.style.display='inline-block';
