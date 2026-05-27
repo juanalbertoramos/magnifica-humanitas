@@ -649,8 +649,34 @@ const store={
 };
 
 /* ---------- annotations model ---------- */
-let A=store.get('annos',{highlights:[],notes:[],bookmarks:[]});
-A.highlights=A.highlights||[];A.notes=A.notes||[];A.bookmarks=A.bookmarks||[];
+// Strict shape validation. Runs on every localStorage load and every JSON
+// import so a corrupted backup or hostile payload can't shape-mismatch and
+// crash subsequent renders, and can't smuggle an HTML-attribute escape
+// through a non-conforming id field.
+const HL_COLORS=new Set(['gold','rose','sky','mint']);
+const ID_RE=/^[a-z0-9]+$/i;
+const MAX_PARA=300;   // doc has 245; 300 is generous headroom for any int
+const isPara=n=>typeof n==='number'&&Number.isInteger(n)&&n>=1&&n<=MAX_PARA;
+function sanitizeAnnos(raw){
+  const out={highlights:[],notes:[],bookmarks:[]};
+  if(!raw||typeof raw!=='object')return out;
+  if(Array.isArray(raw.highlights))out.highlights=raw.highlights.filter(h=>
+    h&&typeof h==='object'
+    &&typeof h.id==='string'&&ID_RE.test(h.id)
+    &&isPara(h.paraN)
+    &&typeof h.start==='number'&&typeof h.end==='number'&&h.start>=0&&h.end>h.start
+    &&typeof h.color==='string'&&HL_COLORS.has(h.color)
+    &&(h.text===undefined||typeof h.text==='string')
+    &&(h.note===undefined||typeof h.note==='string'));
+  if(Array.isArray(raw.notes))out.notes=raw.notes.filter(n=>
+    n&&typeof n==='object'
+    &&typeof n.id==='string'&&ID_RE.test(n.id)
+    &&isPara(n.paraN)
+    &&typeof n.text==='string');
+  if(Array.isArray(raw.bookmarks))out.bookmarks=raw.bookmarks.filter(isPara);
+  return out;
+}
+let A=sanitizeAnnos(store.get('annos',null));
 const saveA=()=>store.set('annos',A);
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 
@@ -965,11 +991,15 @@ function download(name,text){const b=new Blob([text],{type:'text/plain'});const 
 $('#impBtn').onclick=()=>$('#impFile').click();
 $('#impFile').onchange=e=>{
   const f=e.target.files[0];if(!f)return;const rd=new FileReader();
-  rd.onload=()=>{try{const data=JSON.parse(rd.result);const inc=data.annos||data;
+  rd.onload=()=>{try{
+    const data=JSON.parse(rd.result);
+    // Sanitize before merge or replace so a hostile / corrupted file can't
+    // poison the in-memory or stored state.
+    const inc=sanitizeAnnos(data.annos||data);
     if(confirm('Merge imported notes with your current ones?')){
-      A.highlights=dedupe(A.highlights.concat(inc.highlights||[]));
-      A.notes=dedupe(A.notes.concat(inc.notes||[]));
-      A.bookmarks=[...new Set(A.bookmarks.concat(inc.bookmarks||[]))];
+      A.highlights=dedupe(A.highlights.concat(inc.highlights));
+      A.notes=dedupe(A.notes.concat(inc.notes));
+      A.bookmarks=[...new Set(A.bookmarks.concat(inc.bookmarks))];
     }else{A=inc}
     saveA();location.reload();
   }catch(err){alert('Could not read that file.')}};
