@@ -1049,7 +1049,10 @@ function onScroll(){
   // _inText becomes true the first time the scrollspy locates a paragraph
   // above the mid-line, so we don't write last=1 just because the page
   // booted with the initial curPara of 1 and no real scroll happened yet.
-  if(_inText&&curPara>_highMark){_highMark=curPara;store.set('last',curPara)}
+  // Also refresh the Resume button label live so scrolling-then-returning-
+  // to-the-cover (without a reload) doesn't show stale "Resume at ¶N" text.
+  if(_inText&&curPara>_highMark){_highMark=curPara;store.set('last',curPara);
+    if(typeof updateResumeUI==='function')updateResumeUI(curPara)}
   // active chapter/section
   let ac=null,as=null;
   for(const c of chapters){if(c.el.getBoundingClientRect().top<=mid)ac=c.id}
@@ -1447,21 +1450,35 @@ $('#beginBtn').onclick=()=>{const f=chapters[0];if(f)f.el.scrollIntoView({behavi
   };
   tryNext();
 })();
-// resume
-const last=store.get('last',0);
-if(last>=1){
-  const rb=$('#resumeBtn'),restart=$('#restartBtn');
-  rb.style.display='inline-flex';rb.innerHTML='Resume at ¶'+last;rb.onclick=()=>goPara(last);
-  restart.style.display='inline-block';
-  restart.onclick=()=>{
-    store.set('last',0);
-    _highMark=0;   // reset the session high-water too, or onScroll won't write again until past prior peak
-    rb.style.display='none';restart.style.display='none';
-    $('#toast').classList.remove('show');   // dismiss the welcome-back toast if still up
-    window.scrollTo({top:0,behavior:'smooth'});
-    toast('Reading position cleared — start whenever you like.');
-  };
-  setTimeout(()=>toast('Welcome back — continue at ¶'+last,'Resume',()=>goPara(last)),700);
+// Resume UI — kept in sync with the live high-water mark, not just the
+// boot-time stored value. onScroll calls updateResumeUI(curPara) whenever
+// it advances the mark, so a user who scrolls in and then comes back to
+// the cover within the same session sees the updated paragraph number
+// without having to refresh.
+const _resumeBtn=$('#resumeBtn'),_restartBtn=$('#restartBtn');
+function updateResumeUI(n){
+  if(n>=1){
+    _resumeBtn.style.display='inline-flex';
+    _resumeBtn.innerHTML='Resume at ¶'+n;
+    _resumeBtn.onclick=()=>goPara(n);
+    _restartBtn.style.display='inline-block';
+  }else{
+    _resumeBtn.style.display='none';
+    _restartBtn.style.display='none';
+  }
+}
+_restartBtn.onclick=()=>{
+  store.set('last',0);
+  _highMark=0;
+  _inText=false;
+  updateResumeUI(0);
+  $('#toast').classList.remove('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+  toast('Reading position cleared — start whenever you like.');
+};
+if(_highMark>=1){
+  updateResumeUI(_highMark);
+  setTimeout(()=>toast('Welcome back — continue at ¶'+_highMark,'Resume',()=>goPara(_highMark)),700);
 }
 </script>
 </body>
