@@ -343,8 +343,12 @@ sup.fnref a:hover{text-decoration:underline}
 .ap-main{flex:1;min-width:0}
 .ap-title{font-size:12.5px;color:var(--ink);display:flex;justify-content:space-between;gap:8px}
 .ap-title .ap-pos{color:var(--ink-soft);font-variant-numeric:tabular-nums}
-.ap-rail{height:4px;background:var(--bg);border-radius:2px;margin-top:7px;overflow:hidden;cursor:pointer;position:relative}
-.ap-fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--gold))}
+.ap-rail{height:4px;background:var(--bg);border-radius:2px;margin-top:7px;cursor:pointer;position:relative}
+.ap-fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:2px}
+.ap-mark{position:absolute;top:50%;height:22px;width:14px;background:transparent;border:0;padding:0;margin:0;
+  cursor:pointer;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center}
+.ap-mark::before{content:"";display:block;width:2px;height:10px;background:var(--gold-deep);border-radius:1px;transition:background .15s,width .15s}
+.ap-mark:hover::before,.ap-mark--active::before{background:var(--accent);width:3px}
 .ap-cfg{flex:none;background:none;border:none;color:var(--ink-soft);cursor:pointer;font-size:12px;padding:4px 6px;border-radius:6px}
 .ap-cfg:hover{background:var(--bg);color:var(--ink)}
 .ap-close{flex:none;background:none;border:none;color:var(--ink-soft);cursor:pointer;font-size:18px;padding:0 4px}
@@ -1056,24 +1060,22 @@ const NARRATION_CHAPTERS=[
   {start:11065.985,label:'Chapter Five'},
   {start:13450.134,label:'Conclusion'},
 ];
-function chapterAt(t){
-  let ch=NARRATION_CHAPTERS[0];
-  for(const c of NARRATION_CHAPTERS){if(c.start<=t)ch=c;else break}
-  return ch;
-}
-
 const Player={
   engine:'speech',     // 'speech' | 'narration'
   state:'idle',        // 'idle' | 'playing' | 'paused'
   audio:null,          // HTMLAudioElement when engine==='narration'
   readIdx:0,           // current paragraph index (speech engine)
   rate:+store.get('rate',1),
+  _chapterIdx:-1,      // cached current chapter index (-1 forces refresh)
 
   setEngine(engine,audio){
     // Stop whatever's running on the old engine before swapping.
     if('speechSynthesis'in window)speechSynthesis.cancel();
     $$('.para.active-read').forEach(p=>p.classList.remove('active-read'));
     if(this.audio&&this.audio!==audio){this.audio.pause();this.audio.ontimeupdate=this.audio.onplay=this.audio.onpause=this.audio.onended=null}
+    // wipe any prior chapter-jump markers (they only apply to the narration engine)
+    $('#lRail').querySelectorAll('.ap-mark').forEach(m=>m.remove());
+    this._chapterIdx=-1;
     this.engine=engine; this.audio=audio||null; this.state='idle';
     if(audio){
       audio.playbackRate=this.rate;
@@ -1081,6 +1083,7 @@ const Player={
       audio.onpause  =()=>this._setState(audio.ended?'idle':'paused');
       audio.onended  =()=>this._setState('idle');
       audio.ontimeupdate=()=>{this._syncPos();this._syncChapter()};
+      this._renderMarkers();
       this._syncChapter();
       $('#voiceRow').style.display='none';
       $('#voiceNote').innerHTML='Plays the bundled 4-hour narration (Kokoro <i>bm_george</i>, 32 kbps mono, with chapter markers). Speed below adjusts playback rate; everything stays on your device.';
@@ -1100,10 +1103,39 @@ const Player={
     lPlay.classList.toggle('playing',state==='playing');
   },
 
+  _renderMarkers(){
+    if(this.engine!=='narration'||!this.audio)return;
+    const d=this.audio.duration;
+    if(!isFinite(d)||d<=0)return;   // duration not ready (rare given probe gates) — bail silently
+    const rail=$('#lRail');
+    NARRATION_CHAPTERS.forEach((c,i)=>{
+      const b=document.createElement('button');
+      b.type='button';
+      b.className='ap-mark';
+      b.tabIndex=-1;   // skip keyboard tab sequence; clickable via mouse/touch only
+      b.dataset.idx=i;
+      b.title='Jump to '+c.label;
+      b.style.left=(c.start/d*100)+'%';
+      b.addEventListener('click',e=>{
+        e.stopPropagation();   // don't double-fire the rail's seekPct handler
+        this.audio.currentTime=c.start;
+        this._syncPos();
+        this._chapterIdx=-1;   // force _syncChapter to refresh label + active class
+        this._syncChapter();
+      });
+      rail.appendChild(b);
+    });
+  },
+
   _syncChapter(){
     if(this.engine!=='narration'||!this.audio)return;
-    const want='· '+chapterAt(this.audio.currentTime).label;
-    if(lEngine.textContent!==want)lEngine.textContent=want;
+    const t=this.audio.currentTime;
+    let idx=0;
+    for(let i=1;i<NARRATION_CHAPTERS.length;i++){if(NARRATION_CHAPTERS[i].start<=t)idx=i;else break}
+    if(idx===this._chapterIdx)return;
+    this._chapterIdx=idx;
+    lEngine.textContent='· '+NARRATION_CHAPTERS[idx].label;
+    $$('#lRail .ap-mark').forEach((m,i)=>m.classList.toggle('ap-mark--active',i===idx));
   },
 
   _syncPos(){
