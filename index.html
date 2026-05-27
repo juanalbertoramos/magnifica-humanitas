@@ -81,6 +81,11 @@ body[data-font="sans"]{--serif:var(--ui);--display:var(--ui);--title:var(--ui);-
 .topbtn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 @media(max-width:680px){.topbtn{right:14px;bottom:14px;width:40px;height:40px}}
 @media print{.topbtn{display:none}}
+
+/* used by the back-to-top button to fade the content while it jumps,
+   so the text doesn't whiz past during a long scroll */
+#doc{transition:opacity 220ms ease}
+#doc.fading{opacity:0}
 body[data-justify="on"] .para-body{text-align:justify;hyphens:auto}
 a{color:var(--link);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--link) 30%,transparent)}
 a:hover{border-bottom-color:var(--link)}
@@ -1008,7 +1013,20 @@ window.addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(()=>{on
 function persistLast(){if(curPara>1)store.set('last',curPara)}
 window.addEventListener('pagehide',persistLast);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')persistLast()});
-$('#topBtn').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+$('#topBtn').onclick=()=>{
+  if(window.scrollY<4)return;   // already at top, no-op
+  const d=$('#doc');
+  d.classList.add('fading');
+  setTimeout(()=>{
+    // The CSS sets html{scroll-behavior:smooth} for anchor jumps. For the
+    // back-to-top we want an instant jump (the fade covers the transition).
+    // 'behavior:instant' on the options form overrides the CSS for this call.
+    // Try/catch keeps older WebKit that doesn't accept the options dict happy.
+    try{window.scrollTo({top:0,left:0,behavior:'instant'})}
+    catch(e){document.documentElement.scrollTop=0;document.body.scrollTop=0}
+    requestAnimationFrame(()=>d.classList.remove('fading'));
+  },230);
+};
 
 /* ---------- settings ---------- */
 const S=store.get('settings',{theme:'ivory',font:'serif',sizeStep:0,lh:'1.78',justify:false,width:true});
