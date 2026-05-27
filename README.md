@@ -19,24 +19,31 @@ network dependency once loaded.
 - Private notes, highlights and bookmarks (stored in your browser's
   localStorage; never leaves your device).
 - Markdown export of your notes; JSON backup / import.
-- Read-aloud via the browser's Web Speech API. If a narrated MP3 is
-  ever dropped at `audio/magnifica-narration.mp3`, the reader picks it
-  up automatically.
+- Read-aloud via a 4-hour narration (`audio/magnifica-narration.mp3`,
+  bm_george voice, embedded chapter markers). The reader auto-detects
+  the file and falls back to the browser's built-in voices if it's not
+  present.
 - Keyboard navigation: `t` TOC · `/` search · `n` notes · `l` listen ·
   `b` bookmark · `j` / `k` paragraph nav · `Esc` close.
 
 ## Contents of this repository
 
 ```
-index.html               The reader (self-contained HTML + embedded JSON).
-magnifica-humanitas.pdf  Official Vatican PDF, linked from the cover.
-images/                  Cover portrait and one tasteful easter-egg image.
-narration/               Audiobook source kit — plain, SSML, and
-                         per-chunk respelled text for any TTS pipeline,
-                         plus an ffmpeg assemble script.
-build/                   Reproducible build tooling — parser, narration
-                         generator, reader template, and the canonical
-                         structured JSON (build/magnifica.json).
+index.html                     The reader (self-contained HTML + embedded JSON).
+magnifica-humanitas.pdf        Official Vatican PDF, linked from the cover.
+audio/magnifica-narration.mp3  4-hour narration with chapter markers
+                               (Kokoro / bm_george, 32 kbps mono).
+images/                        Cover portrait and one tasteful easter-egg image.
+narration/                     Audiobook source kit — plain, SSML, and
+                               per-chunk respelled text for any TTS pipeline,
+                               plus an ffmpeg assemble script.
+build/                         Reproducible build tooling — parser, narration
+                               generator, reader template, the Kokoro render
+                               pipeline (render_kokoro.py with IPA overrides
+                               for ecclesiastical Latin), and the canonical
+                               structured JSON (build/magnifica.json).
+vatican-source/                Captured copies of the official Vatican HTML
+                               for forensic provenance — see its README.
 ```
 
 ## Rebuilding the reader after editing text or template
@@ -54,13 +61,29 @@ Regenerate the narration kit after a text change:
 python3 build/gen_narration.py
 ```
 
-## Producing the audiobook
+## Re-rendering the audiobook
 
-Pick any TTS engine and feed it `narration/plain/*.txt` (or the SSML
+The shipped narration was rendered with [Kokoro](https://github.com/hexgrad/kokoro)
+via `kokoro-onnx` (no GPU required). To re-render in place — for
+example after correcting a Latin term in `build/render_kokoro.py`'s
+`IPA_OVERRIDES`:
+
+```bash
+python3 -m venv .venv-kokoro
+.venv-kokoro/bin/pip install kokoro-onnx soundfile
+mkdir -p models && curl -L -o models/kokoro-v1.0.onnx \
+  https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/kokoro-v1.0.onnx
+curl -L -o models/voices-v1.0.bin \
+  https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/voices-v1.0.bin
+.venv-kokoro/bin/python build/render_kokoro.py             # renders all 7 chapters into narration/out/
+narration/assemble.sh                                       # concat + 32k mono → audio/magnifica-narration.mp3
+```
+
+To use a different TTS engine instead (ElevenLabs, Azure, Google,
+OpenAI, Piper, etc.), feed it `narration/plain/*.txt` (or the SSML
 variants under `narration/ssml/`, or the pre-respelled chunks under
 `narration/tts-chunks/`). See `narration/README.md` for engine-specific
-examples (ElevenLabs, Azure, Google, OpenAI, local Kokoro/Piper) and
-cost ballparks. Then:
+examples and cost ballparks. Then:
 
 ```bash
 cd narration && ./assemble.sh   # produces ../audio/magnifica-narration.mp3
