@@ -1,0 +1,372 @@
+[
+ {
+  "file": "chunk-001.txt",
+  "chapter": "Introduction",
+  "chars": 3403
+ },
+ {
+  "file": "chunk-002.txt",
+  "chapter": "Introduction",
+  "chars": 3476
+ },
+ {
+  "file": "chunk-003.txt",
+  "chapter": "Introduction",
+  "chars": 3651
+ },
+ {
+  "file": "chunk-004.txt",
+  "chapter": "Introduction",
+  "chars": 3314
+ },
+ {
+  "file": "chunk-005.txt",
+  "chapter": "Introduction",
+  "chars": 3462
+ },
+ {
+  "file": "chunk-006.txt",
+  "chapter": "Chapter One",
+  "chars": 2618
+ },
+ {
+  "file": "chunk-007.txt",
+  "chapter": "Chapter One",
+  "chars": 2708
+ },
+ {
+  "file": "chunk-008.txt",
+  "chapter": "Chapter One",
+  "chars": 3220
+ },
+ {
+  "file": "chunk-009.txt",
+  "chapter": "Chapter One",
+  "chars": 2424
+ },
+ {
+  "file": "chunk-010.txt",
+  "chapter": "Chapter One",
+  "chars": 3782
+ },
+ {
+  "file": "chunk-011.txt",
+  "chapter": "Chapter One",
+  "chars": 3235
+ },
+ {
+  "file": "chunk-012.txt",
+  "chapter": "Chapter One",
+  "chars": 2092
+ },
+ {
+  "file": "chunk-013.txt",
+  "chapter": "Chapter One",
+  "chars": 2120
+ },
+ {
+  "file": "chunk-014.txt",
+  "chapter": "Chapter One",
+  "chars": 3558
+ },
+ {
+  "file": "chunk-015.txt",
+  "chapter": "Chapter One",
+  "chars": 2595
+ },
+ {
+  "file": "chunk-016.txt",
+  "chapter": "Chapter One",
+  "chars": 3290
+ },
+ {
+  "file": "chunk-017.txt",
+  "chapter": "Chapter One",
+  "chars": 2932
+ },
+ {
+  "file": "chunk-018.txt",
+  "chapter": "Chapter One",
+  "chars": 3192
+ },
+ {
+  "file": "chunk-019.txt",
+  "chapter": "Chapter Two",
+  "chars": 3509
+ },
+ {
+  "file": "chunk-020.txt",
+  "chapter": "Chapter Two",
+  "chars": 2989
+ },
+ {
+  "file": "chunk-021.txt",
+  "chapter": "Chapter Two",
+  "chars": 3430
+ },
+ {
+  "file": "chunk-022.txt",
+  "chapter": "Chapter Two",
+  "chars": 3057
+ },
+ {
+  "file": "chunk-023.txt",
+  "chapter": "Chapter Two",
+  "chars": 3473
+ },
+ {
+  "file": "chunk-024.txt",
+  "chapter": "Chapter Two",
+  "chars": 3546
+ },
+ {
+  "file": "chunk-025.txt",
+  "chapter": "Chapter Two",
+  "chars": 3630
+ },
+ {
+  "file": "chunk-026.txt",
+  "chapter": "Chapter Two",
+  "chars": 3538
+ },
+ {
+  "file": "chunk-027.txt",
+  "chapter": "Chapter Two",
+  "chars": 3556
+ },
+ {
+  "file": "chunk-028.txt",
+  "chapter": "Chapter Two",
+  "chars": 2897
+ },
+ {
+  "file": "chunk-029.txt",
+  "chapter": "Chapter Two",
+  "chars": 3296
+ },
+ {
+  "file": "chunk-030.txt",
+  "chapter": "Chapter Two",
+  "chars": 2767
+ },
+ {
+  "file": "chunk-031.txt",
+  "chapter": "Chapter Three",
+  "chars": 3154
+ },
+ {
+  "file": "chunk-032.txt",
+  "chapter": "Chapter Three",
+  "chars": 3598
+ },
+ {
+  "file": "chunk-033.txt",
+  "chapter": "Chapter Three",
+  "chars": 3343
+ },
+ {
+  "file": "chunk-034.txt",
+  "chapter": "Chapter Three",
+  "chars": 3336
+ },
+ {
+  "file": "chunk-035.txt",
+  "chapter": "Chapter Three",
+  "chars": 3444
+ },
+ {
+  "file": "chunk-036.txt",
+  "chapter": "Chapter Three",
+  "chars": 3688
+ },
+ {
+  "file": "chunk-037.txt",
+  "chapter": "Chapter Three",
+  "chars": 3489
+ },
+ {
+  "file": "chunk-038.txt",
+  "chapter": "Chapter Three",
+  "chars": 3339
+ },
+ {
+  "file": "chunk-039.txt",
+  "chapter": "Chapter Three",
+  "chars": 3734
+ },
+ {
+  "file": "chunk-040.txt",
+  "chapter": "Chapter Three",
+  "chars": 2934
+ },
+ {
+  "file": "chunk-041.txt",
+  "chapter": "Chapter Three",
+  "chars": 3195
+ },
+ {
+  "file": "chunk-042.txt",
+  "chapter": "Chapter Four",
+  "chars": 1998
+ },
+ {
+  "file": "chunk-043.txt",
+  "chapter": "Chapter Four",
+  "chars": 3329
+ },
+ {
+  "file": "chunk-044.txt",
+  "chapter": "Chapter Four",
+  "chars": 3065
+ },
+ {
+  "file": "chunk-045.txt",
+  "chapter": "Chapter Four",
+  "chars": 3238
+ },
+ {
+  "file": "chunk-046.txt",
+  "chapter": "Chapter Four",
+  "chars": 3356
+ },
+ {
+  "file": "chunk-047.txt",
+  "chapter": "Chapter Four",
+  "chars": 3229
+ },
+ {
+  "file": "chunk-048.txt",
+  "chapter": "Chapter Four",
+  "chars": 2546
+ },
+ {
+  "file": "chunk-049.txt",
+  "chapter": "Chapter Four",
+  "chars": 3562
+ },
+ {
+  "file": "chunk-050.txt",
+  "chapter": "Chapter Four",
+  "chars": 3593
+ },
+ {
+  "file": "chunk-051.txt",
+  "chapter": "Chapter Four",
+  "chars": 3737
+ },
+ {
+  "file": "chunk-052.txt",
+  "chapter": "Chapter Four",
+  "chars": 3750
+ },
+ {
+  "file": "chunk-053.txt",
+  "chapter": "Chapter Four",
+  "chars": 3128
+ },
+ {
+  "file": "chunk-054.txt",
+  "chapter": "Chapter Four",
+  "chars": 3087
+ },
+ {
+  "file": "chunk-055.txt",
+  "chapter": "Chapter Four",
+  "chars": 3725
+ },
+ {
+  "file": "chunk-056.txt",
+  "chapter": "Chapter Four",
+  "chars": 2327
+ },
+ {
+  "file": "chunk-057.txt",
+  "chapter": "Chapter Five",
+  "chars": 3675
+ },
+ {
+  "file": "chunk-058.txt",
+  "chapter": "Chapter Five",
+  "chars": 2707
+ },
+ {
+  "file": "chunk-059.txt",
+  "chapter": "Chapter Five",
+  "chars": 3769
+ },
+ {
+  "file": "chunk-060.txt",
+  "chapter": "Chapter Five",
+  "chars": 3324
+ },
+ {
+  "file": "chunk-061.txt",
+  "chapter": "Chapter Five",
+  "chars": 2913
+ },
+ {
+  "file": "chunk-062.txt",
+  "chapter": "Chapter Five",
+  "chars": 3610
+ },
+ {
+  "file": "chunk-063.txt",
+  "chapter": "Chapter Five",
+  "chars": 3772
+ },
+ {
+  "file": "chunk-064.txt",
+  "chapter": "Chapter Five",
+  "chars": 3720
+ },
+ {
+  "file": "chunk-065.txt",
+  "chapter": "Chapter Five",
+  "chars": 3717
+ },
+ {
+  "file": "chunk-066.txt",
+  "chapter": "Chapter Five",
+  "chars": 3332
+ },
+ {
+  "file": "chunk-067.txt",
+  "chapter": "Chapter Five",
+  "chars": 3566
+ },
+ {
+  "file": "chunk-068.txt",
+  "chapter": "Chapter Five",
+  "chars": 674
+ },
+ {
+  "file": "chunk-069.txt",
+  "chapter": "Conclusion",
+  "chars": 3672
+ },
+ {
+  "file": "chunk-070.txt",
+  "chapter": "Conclusion",
+  "chars": 3624
+ },
+ {
+  "file": "chunk-071.txt",
+  "chapter": "Conclusion",
+  "chars": 3172
+ },
+ {
+  "file": "chunk-072.txt",
+  "chapter": "Conclusion",
+  "chars": 3016
+ },
+ {
+  "file": "chunk-073.txt",
+  "chapter": "Conclusion",
+  "chars": 3293
+ },
+ {
+  "file": "chunk-074.txt",
+  "chapter": "Conclusion",
+  "chars": 891
+ }
+]

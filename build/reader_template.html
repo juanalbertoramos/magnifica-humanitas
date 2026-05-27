@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="ivory">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magnifica Humanitas — A Reader's Edition</title>
+<meta name="description" content="A beautiful, self-guided reading edition of Pope Leo XIV's first encyclical, Magnifica Humanitas, with notes, highlights, read-aloud and offline study tools.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ───────────────────────── THEME TOKENS ───────────────────────── */
+:root{
+  --serif:"EB Garamond","Iowan Old Style","Palatino Linotype",Palatino,Georgia,Cambria,"Times New Roman",serif;
+  --display:"Cinzel","Cormorant Garamond",Georgia,serif;
+  --title:"Cinzel Decorative","Cinzel",Georgia,serif;
+  --script:"Cormorant Garamond","EB Garamond",Georgia,serif;
+  --ui:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  --measure:38rem;
+  --fs:1.21rem;
+  --lh:1.78;
+  --gold:#c8a44d; --gold-deep:#9a7b2e; --gold-bright:#ecdca6; --gold-soft:#d9bf7e; --champagne:#efe3c2;
+  --crimson:#6e1f2b;
+  --grad-gold:linear-gradient(135deg,var(--gold-bright) 0%,var(--gold) 45%,var(--gold-deep) 100%);
+  --grad-gold-soft:linear-gradient(180deg,var(--gold-bright),var(--gold-deep));
+  --radius:10px;
+  --hl-gold:#f7e7a6; --hl-rose:#f6cdd5; --hl-sky:#bfe0f0; --hl-mint:#c7e9cf;
+  --speed:.28s;
+}
+html[data-theme="ivory"]{
+  --bg:#f5f0e6; --bg2:#ece2cd; --paper:#fffdf8; --ink:#2c2417; --ink-soft:#7a6e52;
+  --rule:#e7dcc0; --rule-soft:#f1e9d7; --accent:#9a7b2e; --accent2:#b6933a;
+  --panel:#fffdf6; --panel-edge:#e7dcc0; --link:#7c5e1f; --shadow:rgba(80,62,24,.18);
+}
+html[data-theme="sepia"]{
+  --bg:#e9dcc0; --bg2:#ddceac; --paper:#f3e9d2; --ink:#43382a; --ink-soft:#6d5f49;
+  --rule:#d3c39f; --rule-soft:#ddceac; --accent:#8a6a24; --accent2:#9a7b2e;
+  --panel:#f3e9d2; --panel-edge:#d3c39f; --link:#7a5a1c; --shadow:rgba(80,60,30,.2);
+}
+html[data-theme="night"]{
+  --bg:#14110b; --bg2:#1b1710; --paper:#181410; --ink:#ece3cf; --ink-soft:#b3a583;
+  --rule:#3a3325; --rule-soft:#2a2419; --accent:#e3c069; --accent2:#d8b35a;
+  --gold:#d8b35a; --gold-bright:#f0dca0;
+  --panel:#1c1810; --panel-edge:#3a3325; --link:#ecca78; --shadow:rgba(0,0,0,.6);
+  --hl-gold:#6a5a23; --hl-rose:#6e3640; --hl-sky:#2f5366; --hl-mint:#37563f;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);color:var(--ink);font-family:var(--serif);
+  font-size:var(--fs);line-height:var(--lh);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  transition:background var(--speed),color var(--speed);
+}
+/* illuminated backdrop: soft gold halo top, warm paper vignette */
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(120% 70% at 50% -8%, color-mix(in srgb,var(--gold-bright) 38%,transparent) 0%, transparent 55%),
+    radial-gradient(80% 50% at 50% 108%, color-mix(in srgb,var(--gold) 12%,transparent) 0%, transparent 60%);}
+body[data-font="sans"]{--serif:var(--ui);--display:var(--ui);--title:var(--ui);--script:var(--ui)}
+/* hairline gold frame for an upscale, framed feel */
+.goldframe{position:fixed;inset:9px;z-index:120;pointer-events:none;border:1px solid color-mix(in srgb,var(--gold) 42%,transparent);border-radius:6px;
+  box-shadow:inset 0 0 0 3px color-mix(in srgb,var(--bg) 70%,transparent),inset 0 0 28px color-mix(in srgb,var(--gold) 10%,transparent)}
+.goldframe i{position:absolute;width:18px;height:18px;border:1px solid var(--gold);opacity:.7}
+.goldframe i.tl{top:5px;left:5px;border-right:0;border-bottom:0}
+.goldframe i.tr{top:5px;right:5px;border-left:0;border-bottom:0}
+.goldframe i.bl{bottom:5px;left:5px;border-right:0;border-top:0}
+.goldframe i.br{bottom:5px;right:5px;border-left:0;border-top:0}
+@media(max-width:680px){.goldframe{display:none}}
+body[data-justify="on"] .para-body{text-align:justify;hyphens:auto}
+a{color:var(--link);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--link) 30%,transparent)}
+a:hover{border-bottom-color:var(--link)}
+em{font-style:italic}
+::selection{background:color-mix(in srgb,var(--gold) 45%,transparent)}
+
+/* ───────────────────────── PROGRESS + HEADER ───────────────────────── */
+#progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:200;
+  background:var(--grad-gold);transition:width .12s ease-out}
+header{position:fixed;top:0;left:0;right:0;z-index:150;
+  background:color-mix(in srgb,var(--paper) 86%,transparent);
+  backdrop-filter:blur(14px) saturate(1.1);-webkit-backdrop-filter:blur(14px) saturate(1.1);
+  border-bottom:1px solid transparent;
+  border-image:linear-gradient(90deg,transparent,var(--gold) 50%,transparent) 1}
+.hbar{max-width:1180px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--display);min-width:0}
+.crest{width:34px;height:34px;flex:none;display:grid;place-items:center;color:var(--gold-deep)}
+.crest svg{width:34px;height:34px;display:block;filter:drop-shadow(0 1px 2px var(--shadow))}
+.brand .bt{font-size:16px;font-weight:600;letter-spacing:.06em;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase;font-family:var(--display)}
+.brand .bs{font-family:var(--ui);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+.hspace{flex:1}
+.htools{display:flex;align-items:center;gap:4px}
+.iconbtn{width:38px;height:38px;border-radius:9px;border:1px solid transparent;background:transparent;color:var(--ink-soft);
+  cursor:pointer;display:grid;place-items:center;font-family:var(--ui);transition:all .16s}
+.iconbtn:hover{background:var(--panel);border-color:var(--panel-edge);color:var(--ink)}
+.iconbtn.on{background:var(--accent);color:#fff;border-color:transparent}
+.iconbtn svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.iconbtn .lab{display:none}
+
+/* ───────────────────────── LAYOUT ───────────────────────── */
+main{max-width:var(--measure);margin:0 auto;padding:0 22px 28vh}
+#doc{padding-top:96px}
+
+/* COVER */
+.cover{min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:120px 0 60px;text-align:center;position:relative}
+/* heraldic emblem + portrait */
+.emblem{width:clamp(96px,16vw,150px);height:auto;margin:0 auto 6px;display:block;filter:drop-shadow(0 4px 14px color-mix(in srgb,var(--gold-deep) 30%,transparent))}
+.portrait{width:clamp(120px,20vw,168px);height:clamp(120px,20vw,168px);margin:0 auto 22px;border-radius:50%;position:relative;
+  display:grid;place-items:center;
+  background:var(--grad-gold);padding:4px;box-shadow:0 10px 30px var(--shadow),0 0 0 1px color-mix(in srgb,var(--gold) 60%,transparent)}
+.portrait .pin{width:100%;height:100%;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 50% 38%,var(--paper),var(--bg2));display:grid;place-items:center}
+.portrait img{width:100%;height:100%;object-fit:cover;object-position:50% 18%;border-radius:50%;background:var(--bg2)}
+.portrait .pin svg{width:62%;height:62%;opacity:.92}
+.portrait::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:1px solid color-mix(in srgb,var(--gold) 45%,transparent)}
+.cover .kicker{font-family:var(--ui);font-size:11.5px;letter-spacing:.36em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:18px}
+.cover .pope{font-family:var(--script);font-size:clamp(21px,4.6vw,32px);font-weight:500;color:var(--ink-soft);font-style:italic;margin-bottom:10px;letter-spacing:.02em}
+.cover h1{font-family:var(--title);font-weight:700;letter-spacing:.02em;line-height:1.0;
+  font-size:clamp(46px,11vw,98px);margin:6px 0 4px;
+  background:var(--grad-gold);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 1px color-mix(in srgb,var(--gold-deep) 22%,transparent))}
+html[data-theme="night"] .cover h1{filter:drop-shadow(0 1px 10px color-mix(in srgb,var(--gold) 30%,transparent))}
+.cover .sub{font-family:var(--script);font-size:clamp(19px,3.6vw,27px);font-style:italic;color:var(--accent);max-width:30ch;margin:16px auto 0;line-height:1.32;font-weight:500}
+.rule-orn{display:flex;align-items:center;justify-content:center;gap:14px;margin:34px 0 30px;color:var(--gold)}
+.rule-orn .ln{height:1px;width:clamp(48px,12vw,92px);background:linear-gradient(90deg,transparent,var(--gold-deep))}
+.rule-orn .ln.r{background:linear-gradient(90deg,var(--gold-deep),transparent)}
+.rule-orn svg{width:34px;height:18px;color:var(--gold-deep)}
+.cover .meta{font-family:var(--ui);font-size:13px;color:var(--ink-soft);letter-spacing:.06em}
+.stats{display:flex;gap:0;justify-content:center;flex-wrap:wrap;margin:34px auto 6px;max-width:560px;
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.stat{font-family:var(--ui);padding:18px 22px;position:relative}
+.stat+.stat::before{content:"";position:absolute;left:0;top:24%;height:52%;width:1px;background:var(--rule)}
+.stat b{display:block;font-family:var(--display);font-size:30px;font-weight:600;color:var(--accent);line-height:1}
+.stat span{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-top:4px;display:block}
+.cover-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:34px}
+.btn{font-family:var(--ui);font-size:13.5px;font-weight:600;letter-spacing:.03em;padding:13px 26px;border-radius:40px;cursor:pointer;
+  border:1px solid var(--gold-deep);background:var(--grad-gold);color:#3a2c08;transition:all .18s;display:inline-flex;align-items:center;gap:8px;
+  box-shadow:0 4px 14px color-mix(in srgb,var(--gold-deep) 22%,transparent)}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 22px color-mix(in srgb,var(--gold-deep) 32%,transparent);border-bottom-color:var(--gold-deep)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--gold);box-shadow:none}
+.btn.ghost:hover{border-color:var(--gold-deep);color:var(--gold-deep);background:color-mix(in srgb,var(--gold) 10%,transparent)}
+.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.langrow{margin-top:30px;font-family:var(--ui);font-size:12px;color:var(--ink-soft)}
+.langrow .ll{display:inline-block;margin:3px 5px;padding:4px 11px;border:1px solid var(--panel-edge);border-radius:30px;color:var(--ink-soft)}
+.langrow .ll:hover{border-color:var(--accent);color:var(--accent)}
+.scrolltip{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);font-family:var(--ui);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);opacity:.7;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,7px)}}
+
+/* CHAPTERS / SECTIONS */
+.chapter-head{margin:92px 0 38px;text-align:center;scroll-margin-top:92px}
+.chapter-head:first-of-type{margin-top:30px}
+.chapter-head .csym{width:40px;height:40px;margin:0 auto 14px;color:var(--gold-deep);opacity:.95}
+.chapter-head .clabel{font-family:var(--ui);font-size:11px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:14px}
+.chapter-head .ctitle{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.03em;
+  font-size:clamp(25px,5vw,38px);line-height:1.14;color:var(--ink);max-width:24ch;margin:0 auto}
+.chapter-head .corn{display:flex;align-items:center;justify-content:center;gap:13px;margin-top:20px;color:var(--gold-deep)}
+.chapter-head .corn .ln{height:1px;width:60px;background:linear-gradient(90deg,transparent,var(--gold-deep))}
+.chapter-head .corn .ln.r{background:linear-gradient(90deg,var(--gold-deep),transparent)}
+.chapter-head .corn svg{width:26px;height:14px}
+h3.section{font-family:var(--display);font-weight:600;color:var(--accent);margin:42px 0 8px;line-height:1.3;scroll-margin-top:92px}
+h3.section.lvl1{font-size:1.4em;letter-spacing:.02em;padding-bottom:10px;position:relative;text-align:center}
+h3.section.lvl1::after{content:"";display:block;width:64px;height:2px;margin:12px auto 0;background:var(--grad-gold)}
+h3.section.lvl2{font-size:1.16em;font-style:italic;color:var(--accent2);font-weight:500;font-family:var(--script)}
+h3.section.lvl2::before{content:"\2727";color:var(--gold);font-style:normal;margin-right:.5em;font-size:.7em;vertical-align:.15em}
+h3.section a{border:none;color:inherit}
+
+/* PARAGRAPHS */
+.para{position:relative;margin:0 0 1.05em;scroll-margin-top:88px}
+.para-body{position:relative}
+.para .gutter{position:absolute;left:-3.1rem;top:.30em;width:2.4rem;text-align:right;
+  font-family:var(--ui);user-select:none}
+.pnum{font-size:11px;color:var(--ink-soft);opacity:.5;background:none;border:none;cursor:pointer;
+  font-family:var(--ui);padding:2px 4px;border-radius:5px;transition:all .15s;font-variant-numeric:tabular-nums}
+.para:hover .pnum{opacity:1}
+.pnum:hover{color:var(--accent);background:var(--panel)}
+.para.bookmarked .pnum{opacity:1;color:var(--accent);font-weight:600}
+.para.bookmarked .pnum::after{content:"\2691";display:block;font-size:10px}
+.para.has-note .gutter::before{content:"";position:absolute;right:-2px;top:1.6em;width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.para.lead .para-body::first-letter{font-family:var(--title);font-weight:700;
+  float:left;font-size:3.7em;line-height:.74;padding:.06em .12em 0 0;margin-top:.04em;
+  background:var(--grad-gold);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 1px 1px color-mix(in srgb,var(--gold-deep) 30%,transparent))}
+.para.active-read .para-body{background:color-mix(in srgb,var(--gold) 16%,transparent);box-shadow:0 0 0 6px color-mix(in srgb,var(--gold) 16%,transparent);border-radius:4px}
+.sig{text-align:center;font-style:italic;color:var(--ink-soft);margin:8px 0;line-height:1.5}
+.sig.name{font-style:normal;font-family:var(--display);font-size:1.3em;letter-spacing:.06em;color:var(--ink);margin-top:4px}
+
+/* highlights */
+mark.hl{background:var(--hl-gold);color:inherit;border-radius:2px;padding:.02em 0;cursor:pointer;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+mark.hl-gold{background:var(--hl-gold)} mark.hl-rose{background:var(--hl-rose)}
+mark.hl-sky{background:var(--hl-sky)} mark.hl-mint{background:var(--hl-mint)}
+mark.hl.has-note{box-shadow:inset 0 -2px 0 var(--accent)}
+mark.search-hit{background:color-mix(in srgb,var(--gold) 60%,#fff);color:#26211a;border-radius:2px}
+mark.search-hit.cur{background:var(--accent);color:#fff}
+
+/* footnote refs */
+sup.fnref a{color:var(--accent);font-family:var(--ui);font-size:.62em;font-weight:600;border:none;padding:0 1px;
+  font-feature-settings:"sups" off;text-decoration:none}
+sup.fnref a:hover{text-decoration:underline}
+
+/* footnotes section */
+#fnsec{margin-top:80px;border-top:2px solid var(--rule);padding-top:26px;font-size:.88em;color:var(--ink-soft)}
+#fnsec h4{font-family:var(--display);color:var(--ink);font-size:1.5em;margin-bottom:18px;text-align:center}
+.fn{display:flex;gap:10px;margin:0 0 .7em;scroll-margin-top:90px;line-height:1.5}
+.fn .fnn{font-family:var(--ui);font-size:.8em;color:var(--accent);flex:none;min-width:1.8em;text-align:right;font-weight:600}
+.fn:target{background:color-mix(in srgb,var(--gold) 18%,transparent);border-radius:5px;padding:4px 6px;margin-left:-6px}
+.fn .back{font-family:var(--ui);font-size:.8em;border:none}
+
+/* doc footer */
+.docfoot{margin-top:70px;padding-top:30px;border-top:1px solid transparent;text-align:center;
+  border-image:linear-gradient(90deg,transparent,var(--gold) 50%,transparent) 1;
+  font-family:var(--ui);font-size:12px;color:var(--ink-soft);line-height:1.7}
+.docfoot a{color:var(--ink-soft)}
+.footmark{width:46px;height:56px;margin:0 auto 16px;color:var(--gold-deep);opacity:.85}
+.footmark svg{width:100%;height:100%}
+.egg{cursor:pointer;font-size:18px;border:none;background:none;filter:grayscale(.3);opacity:.6;transition:all .2s}
+.egg:hover{opacity:1;filter:none;transform:rotate(-8deg) scale(1.15)}
+
+/* ───────────────────────── PANELS (drawers) ───────────────────────── */
+.scrim{position:fixed;inset:0;background:rgba(20,15,8,.42);z-index:300;opacity:0;visibility:hidden;transition:opacity var(--speed)}
+.scrim.show{opacity:1;visibility:visible}
+.panel{position:fixed;top:0;bottom:0;width:min(420px,90vw);background:var(--panel);z-index:310;
+  border-right:1px solid var(--panel-edge);display:flex;flex-direction:column;
+  transition:transform var(--speed) cubic-bezier(.4,0,.2,1);box-shadow:0 0 50px var(--shadow)}
+.panel.left{left:0;transform:translateX(-104%)}
+.panel.right{right:0;left:auto;border-right:none;border-left:1px solid var(--panel-edge);transform:translateX(104%)}
+.panel.open{transform:translateX(0)}
+.phead{padding:18px 20px;border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between}
+.phead h2{font-family:var(--display);font-size:23px;font-weight:600;color:var(--ink)}
+.phead .x{background:none;border:none;cursor:pointer;color:var(--ink-soft);font-size:24px;line-height:1;padding:4px 8px;border-radius:6px}
+.phead .x:hover{background:var(--bg);color:var(--ink)}
+.pbody{overflow-y:auto;padding:14px 18px 40px;flex:1;font-family:var(--ui);font-size:14px}
+
+/* TOC */
+.toc-prog{font-family:var(--ui);font-size:12px;color:var(--ink-soft);margin:0 0 12px}
+.toc-prog .barwrap{height:5px;background:var(--bg);border-radius:3px;margin-top:6px;overflow:hidden}
+.toc-prog .bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--gold))}
+.toc-ch{margin:2px 0}
+.toc-ch>a{display:block;font-family:var(--display);font-size:17px;font-weight:600;color:var(--ink);padding:8px 8px 4px;border:none;border-radius:7px}
+.toc-ch>a .cl{display:block;font-family:var(--ui);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent2);font-weight:600}
+.toc-ch>a:hover{background:var(--bg)}
+.toc-ch>a.cur{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.toc-sec{display:block;font-size:13px;color:var(--ink-soft);padding:5px 8px 5px 16px;border:none;border-radius:6px;line-height:1.35}
+.toc-sec.lvl2{padding-left:26px;font-size:12.5px;font-style:italic}
+.toc-sec:hover{background:var(--bg);color:var(--ink)}
+.toc-sec.cur{color:var(--accent);font-weight:600}
+
+/* settings */
+.set-group{margin:0 0 22px}
+.set-group h3{font-family:var(--ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{flex:1;min-width:62px;font-family:var(--ui);font-size:13px;padding:9px 8px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--panel-edge);background:var(--bg);color:var(--ink);transition:all .15s}
+.seg button.on{background:var(--accent);color:#fff;border-color:transparent}
+.seg button:hover{border-color:var(--accent)}
+.sw{display:flex;align-items:center;justify-content:space-between;padding:10px 0}
+.sw label{font-size:13.5px}
+.toggle{position:relative;width:42px;height:24px;border-radius:14px;background:var(--bg);border:1px solid var(--panel-edge);cursor:pointer;transition:all .2s}
+.toggle.on{background:var(--accent);border-color:transparent}
+.toggle::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:all .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.toggle.on::after{left:21px}
+.swatchrow{display:flex;gap:10px}
+.swatch{width:30px;height:30px;border-radius:50%;cursor:pointer;border:2px solid transparent}
+.swatch.on{border-color:var(--ink)}
+
+/* notes panel */
+.notes-actions{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.notes-actions .btn{font-size:12px;padding:8px 12px}
+.tabs{display:flex;gap:4px;margin-bottom:14px;border-bottom:1px solid var(--rule)}
+.tab{font-family:var(--ui);font-size:13px;padding:8px 12px;cursor:pointer;border:none;background:none;color:var(--ink-soft);border-bottom:2px solid transparent}
+.tab.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+.note-card{background:var(--bg);border:1px solid var(--rule);border-radius:9px;padding:11px 12px;margin-bottom:10px;cursor:pointer;transition:all .15s}
+.note-card:hover{border-color:var(--accent)}
+.note-card .nref{font-family:var(--ui);font-size:11px;color:var(--accent);font-weight:600;margin-bottom:5px;display:flex;justify-content:space-between}
+.note-card .nq{font-family:var(--serif);font-size:14px;font-style:italic;color:var(--ink-soft);border-left:2px solid var(--gold);padding-left:8px;margin-bottom:6px;line-height:1.4}
+.note-card .ntext{font-size:13.5px;color:var(--ink);line-height:1.45;white-space:pre-wrap}
+.note-card .del{float:right;border:none;background:none;color:var(--ink-soft);cursor:pointer;font-size:13px}
+.note-card .del:hover{color:var(--crimson)}
+.empty{text-align:center;color:var(--ink-soft);font-size:13px;padding:40px 10px;line-height:1.6}
+.empty .big{font-size:30px;display:block;margin-bottom:10px;opacity:.5}
+
+/* search bar */
+#searchbar{position:fixed;top:0;left:0;right:0;z-index:160;background:var(--panel);border-bottom:1px solid var(--panel-edge);
+  transform:translateY(-110%);transition:transform var(--speed);box-shadow:0 6px 20px var(--shadow)}
+#searchbar.open{transform:translateY(0)}
+.sbin{max-width:760px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:12px}
+#searchInput{flex:1;font-family:var(--serif);font-size:17px;background:transparent;border:none;color:var(--ink);padding:8px 0}
+#searchInput:focus{outline:none}
+.scount{font-family:var(--ui);font-size:12px;color:var(--ink-soft);white-space:nowrap;font-variant-numeric:tabular-nums}
+.snav{display:flex;gap:2px}
+.snav button,.sclose{background:none;border:none;color:var(--ink-soft);cursor:pointer;padding:6px 9px;border-radius:6px;font-family:var(--ui)}
+.snav button:hover,.sclose:hover{background:var(--bg);color:var(--ink)}
+
+/* selection toolbar */
+#seltool{position:absolute;z-index:170;display:none;background:var(--ink);border-radius:30px;padding:5px 7px;
+  box-shadow:0 8px 24px rgba(0,0,0,.35);align-items:center;gap:5px}
+#seltool.show{display:flex}
+#seltool .hc{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent}
+#seltool .hc:hover{transform:scale(1.12)}
+#seltool .tdiv{width:1px;height:20px;background:rgba(255,255,255,.2);margin:0 2px}
+#seltool .ti{background:none;border:none;color:#fff;cursor:pointer;padding:4px 8px;font-family:var(--ui);font-size:12px;border-radius:14px;display:flex;align-items:center;gap:5px}
+#seltool .ti:hover{background:rgba(255,255,255,.15)}
+#seltool .ti svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8}
+
+/* footnote popover */
+#fnpop{position:absolute;z-index:175;display:none;max-width:min(420px,86vw);background:var(--panel);
+  border:1px solid var(--panel-edge);border-radius:12px;padding:14px 16px;box-shadow:0 14px 40px var(--shadow);
+  font-family:var(--serif);font-size:14.5px;line-height:1.55;color:var(--ink)}
+#fnpop.show{display:block}
+#fnpop .fnp-h{font-family:var(--ui);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:7px;display:flex;justify-content:space-between}
+#fnpop .fnp-h a{border:none}
+#fnpop .x{cursor:pointer;color:var(--ink-soft)}
+
+/* note editor modal */
+.modal{position:fixed;inset:0;z-index:340;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(20,15,8,.5)}
+.modal.show{display:flex}
+.mbox{background:var(--panel);border-radius:14px;width:min(520px,96vw);padding:22px;box-shadow:0 20px 60px var(--shadow)}
+.mbox h3{font-family:var(--display);font-size:22px;color:var(--ink);margin-bottom:4px}
+.mbox .mref{font-family:var(--ui);font-size:12px;color:var(--accent);margin-bottom:12px}
+.mbox .mq{font-style:italic;color:var(--ink-soft);border-left:2px solid var(--gold);padding-left:10px;margin-bottom:14px;font-size:15px}
+.mbox textarea{width:100%;min-height:130px;font-family:var(--serif);font-size:15px;padding:12px;border-radius:9px;
+  border:1px solid var(--panel-edge);background:var(--bg);color:var(--ink);resize:vertical;line-height:1.5}
+.mbox textarea:focus{outline:none;border-color:var(--accent)}
+.mfoot{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}
+
+/* listen / read-aloud bar */
+#listen{position:fixed;left:50%;transform:translateX(-50%) translateY(140%);bottom:18px;z-index:140;
+  width:min(540px,94vw);background:var(--panel);border:1px solid var(--panel-edge);border-radius:16px;
+  padding:12px 16px;box-shadow:0 14px 40px var(--shadow);transition:transform var(--speed);
+  display:flex;align-items:center;gap:13px;font-family:var(--ui)}
+#listen.open{transform:translateX(-50%) translateY(0)}
+.ap-play{flex:none;width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;
+  display:grid;place-items:center;box-shadow:0 3px 10px var(--shadow);transition:transform .15s}
+.ap-play:hover{transform:scale(1.06)}
+.ap-play svg{width:16px;height:16px;fill:currentColor}
+.ap-play .ico-pause{display:none}
+.ap-play.playing .ico-play{display:none}.ap-play.playing .ico-pause{display:block}
+.ap-step{flex:none;width:32px;height:32px;border-radius:50%;background:transparent;border:1px solid var(--panel-edge);
+  color:var(--ink-soft);cursor:pointer;display:grid;place-items:center}
+.ap-step:hover{color:var(--accent);border-color:var(--accent)}
+.ap-step svg{width:14px;height:14px;fill:currentColor}
+.ap-main{flex:1;min-width:0}
+.ap-title{font-size:12.5px;color:var(--ink);display:flex;justify-content:space-between;gap:8px}
+.ap-title .ap-pos{color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.ap-rail{height:4px;background:var(--bg);border-radius:2px;margin-top:7px;overflow:hidden;cursor:pointer;position:relative}
+.ap-fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--gold))}
+.ap-cfg{flex:none;background:none;border:none;color:var(--ink-soft);cursor:pointer;font-size:12px;padding:4px 6px;border-radius:6px}
+.ap-cfg:hover{background:var(--bg);color:var(--ink)}
+.ap-close{flex:none;background:none;border:none;color:var(--ink-soft);cursor:pointer;font-size:18px;padding:0 4px}
+#listenCfg{position:fixed;left:50%;transform:translateX(-50%);bottom:80px;z-index:141;width:min(540px,94vw);
+  background:var(--panel);border:1px solid var(--panel-edge);border-radius:14px;padding:14px 16px;box-shadow:0 14px 40px var(--shadow);
+  font-family:var(--ui);font-size:13px;display:none}
+#listenCfg.show{display:block}
+#listenCfg .row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:8px 0}
+#listenCfg select,#listenCfg input[type=range]{font-family:var(--ui)}
+#listenCfg select{flex:1;max-width:60%;padding:6px;border-radius:7px;border:1px solid var(--panel-edge);background:var(--bg);color:var(--ink)}
+.note-mini{font-size:11.5px;color:var(--ink-soft);line-height:1.5;margin-top:6px;border-top:1px dashed var(--rule);padding-top:8px}
+
+/* toast */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(160%);z-index:190;
+  background:var(--ink);color:var(--bg);font-family:var(--ui);font-size:13.5px;padding:12px 18px;border-radius:30px;
+  box-shadow:0 10px 30px rgba(0,0,0,.3);transition:transform .3s;display:flex;align-items:center;gap:14px}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#toast button{background:var(--gold);color:#26211a;border:none;border-radius:20px;padding:6px 13px;font-family:var(--ui);font-weight:600;cursor:pointer}
+
+/* easter egg modal */
+.egg-card{text-align:center}
+.egg-card .shoe{margin:6px auto 14px}
+.egg-card h3{font-family:var(--display);font-size:26px;color:var(--ink)}
+.egg-card p{font-family:var(--ui);font-size:13px;color:var(--ink-soft);line-height:1.6;margin:8px 0}
+.egg-card .photo{width:100%;border-radius:12px;margin:10px 0;display:none}
+.egg-card .drophint{font-family:var(--ui);font-size:11.5px;color:var(--ink-soft);background:var(--bg);border:1px dashed var(--panel-edge);border-radius:9px;padding:10px;margin-top:8px}
+
+@media(max-width:680px){
+  :root{--fs:1.12rem;--measure:34rem}
+  main{padding:0 18px 26vh}
+  .para .gutter{position:static;width:auto;text-align:left;display:inline}
+  .para.bookmarked .pnum::after{display:inline;margin-left:4px}
+  .brand .bs{display:none}
+}
+@media print{
+  header,#listen,#listenCfg,.panel,.scrim,#searchbar,#seltool,#fnpop,#progress,#toast,.cover-actions,.scrolltip,#dotnav{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{max-width:100%;padding:0}
+  .para.active-read .para-body{background:none;box-shadow:none}
+  a{color:#000}
+}
+</style>
+</head>
+<body data-font="serif" data-justify="off">
+<div class="goldframe"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div>
+<div id="progress"></div>
+
+<!-- ── Heraldic symbol library (gold line-art) ── -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+ <symbol id="sym-keys" viewBox="0 0 100 122">
+  <g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+   <path d="M36 52 Q34 20 50 11 Q66 20 64 52"/>
+   <path d="M32 52 h36"/><path d="M35.5 41 h29"/><path d="M38.5 30 h23"/>
+   <circle cx="50" cy="8.5" r="2.6"/><path d="M50 6 v-5 M47.5 3 h5"/>
+   <g transform="rotate(24 50 86)">
+     <circle cx="50" cy="104" r="8.5"/><circle cx="50" cy="104" r="2.6"/>
+     <line x1="50" y1="95.5" x2="50" y2="60"/>
+     <path d="M50 60 h11 v9 h-3.5 v-4 h-3.5 v4 H50"/>
+   </g>
+   <g transform="rotate(-24 50 86)" opacity="0.5">
+     <circle cx="50" cy="104" r="8.5"/><circle cx="50" cy="104" r="2.6"/>
+     <line x1="50" y1="95.5" x2="50" y2="60"/>
+     <path d="M50 60 h11 v9 h-3.5 v-4 h-3.5 v4 H50"/>
+   </g>
+  </g>
+ </symbol>
+ <symbol id="sym-chirho" viewBox="0 0 60 64">
+  <g fill="none" stroke="currentColor" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round">
+   <line x1="30" y1="6" x2="30" y2="58"/>
+   <path d="M30 10 q13 0 13 11 q0 11 -13 11"/>
+   <line x1="12" y1="16" x2="48" y2="52"/><line x1="48" y1="16" x2="12" y2="52"/>
+  </g>
+ </symbol>
+ <symbol id="sym-star" viewBox="0 0 44 44">
+  <g fill="currentColor">
+   <path d="M22 1 l2.6 14.4 14.4 2.6 -14.4 2.6 -2.6 14.4 -2.6 -14.4 -14.4 -2.6 14.4 -2.6 z"/>
+   <path d="M22 6 l1.6 9 9 1.6 -9 1.6 -1.6 9 -1.6 -9 -9 -1.6 9 -1.6 z" opacity=".5" transform="rotate(45 22 22)"/>
+  </g>
+ </symbol>
+ <symbol id="sym-orn" viewBox="0 0 48 16">
+  <g fill="currentColor">
+   <path d="M24 1 L28 8 L24 15 L20 8 Z"/>
+   <circle cx="11" cy="8" r="1.5"/><circle cx="37" cy="8" r="1.5"/>
+   <path d="M14 8 q4 -4 6 0 q-4 4 -6 0Z"/><path d="M34 8 q-4 -4 -6 0 q4 4 6 0Z"/>
+  </g>
+ </symbol>
+ <symbol id="sym-dove" viewBox="0 0 48 40">
+  <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+   <path d="M6 30 q10 -2 16 -10 q3 -5 9 -6 q8 -1 11 4 q-4 1 -7 0 q4 4 2 9 q-3 -3 -6 -3 q2 6 -2 10 q-2 -5 -5 -6 q-9 4 -18 2 z"/>
+   <path d="M8 30 l-5 6"/>
+  </g>
+ </symbol>
+</defs></svg>
+
+<header>
+ <div class="hbar">
+  <div class="brand">
+   <div class="crest"><svg><use href="#sym-keys"/></svg></div>
+   <div style="min-width:0">
+     <div class="bt">Magnifica Humanitas</div>
+     <div class="bs">Reader's Edition · Leo XIV</div>
+   </div>
+  </div>
+  <div class="hspace"></div>
+  <div class="htools">
+   <button class="iconbtn" id="btnToc" title="Contents (t)"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="20" y2="12"/><line x1="8" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg></button>
+   <button class="iconbtn" id="btnSearch" title="Search (/)"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+   <button class="iconbtn" id="btnListen" title="Read aloud (l)"><svg viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg></button>
+   <button class="iconbtn" id="btnNotes" title="Notes & highlights (n)"><svg viewBox="0 0 24 24"><path d="M4 4h12l4 4v12H4z"/><path d="M16 4v4h4"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg></button>
+   <button class="iconbtn" id="btnSet" title="Reading settings"><svg viewBox="0 0 24 24"><path d="M4 7h11"/><path d="M19 7h1"/><circle cx="17" cy="7" r="2"/><path d="M4 17h7"/><path d="M15 17h5"/><circle cx="13" cy="17" r="2"/></svg></button>
+  </div>
+ </div>
+</header>
+
+<div id="searchbar">
+ <div class="sbin">
+   <svg viewBox="0 0 24 24" width="18" height="18" style="stroke:var(--ink-soft);fill:none;stroke-width:1.7"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+   <input id="searchInput" placeholder="Search the encyclical…" autocomplete="off">
+   <span class="scount" id="scount"></span>
+   <div class="snav"><button id="sPrev" title="Previous">&#8249;</button><button id="sNext" title="Next">&#8250;</button></div>
+   <button class="sclose" id="sClose">&times;</button>
+ </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+
+<!-- TOC -->
+<aside class="panel left" id="tocPanel">
+ <div class="phead"><h2>Contents</h2><button class="x" data-close>&times;</button></div>
+ <div class="pbody">
+   <div class="toc-prog">Reading progress · <span id="tocPct">0%</span><div class="barwrap"><div class="bar" id="tocBar"></div></div></div>
+   <nav id="tocNav"></nav>
+ </div>
+</aside>
+
+<!-- NOTES -->
+<aside class="panel right" id="notesPanel">
+ <div class="phead"><h2>My Study</h2><button class="x" data-close>&times;</button></div>
+ <div class="pbody">
+   <div class="notes-actions">
+     <button class="btn ghost" id="expMd">Export Markdown</button>
+     <button class="btn ghost" id="expJson">Backup JSON</button>
+     <button class="btn ghost" id="impBtn">Import</button>
+     <input type="file" id="impFile" accept="application/json" hidden>
+   </div>
+   <div class="tabs">
+     <button class="tab on" data-tab="all">All</button>
+     <button class="tab" data-tab="hl">Highlights</button>
+     <button class="tab" data-tab="note">Notes</button>
+     <button class="tab" data-tab="bm">Bookmarks</button>
+   </div>
+   <div id="notesList"></div>
+ </div>
+</aside>
+
+<!-- SETTINGS -->
+<aside class="panel right" id="setPanel">
+ <div class="phead"><h2>Reading</h2><button class="x" data-close>&times;</button></div>
+ <div class="pbody">
+   <div class="set-group"><h3>Theme</h3><div class="seg" id="segTheme">
+     <button data-theme="ivory">Ivory</button><button data-theme="sepia">Sepia</button><button data-theme="night">Night</button></div></div>
+   <div class="set-group"><h3>Typeface</h3><div class="seg" id="segFont">
+     <button data-font="serif">Serif</button><button data-font="sans">Sans</button></div></div>
+   <div class="set-group"><h3>Text size</h3><div class="seg" id="segSize">
+     <button data-size="dn">A&minus;</button><button data-size="rst">Reset</button><button data-size="up">A&plus;</button></div></div>
+   <div class="set-group"><h3>Line spacing</h3><div class="seg" id="segLh">
+     <button data-lh="1.55">Snug</button><button data-lh="1.78">Normal</button><button data-lh="2.05">Airy</button></div></div>
+   <div class="set-group"><div class="sw"><label>Justify text</label><div class="toggle" id="tgJustify"></div></div>
+     <div class="sw"><label>Width: comfortable column</label><div class="toggle on" id="tgWidth"></div></div></div>
+   <div class="set-group"><h3>About</h3>
+     <p class="note-mini" style="border:none;padding:0">Your highlights, notes &amp; bookmarks are saved privately in this browser (localStorage). Use <b>Backup JSON</b> to keep them safe or move them to another device. This page works fully offline.</p>
+   </div>
+ </div>
+</aside>
+
+<!-- selection toolbar -->
+<div id="seltool">
+ <div class="hc" data-hl="gold" style="background:var(--hl-gold)"></div>
+ <div class="hc" data-hl="rose" style="background:var(--hl-rose)"></div>
+ <div class="hc" data-hl="sky" style="background:var(--hl-sky)"></div>
+ <div class="hc" data-hl="mint" style="background:var(--hl-mint)"></div>
+ <div class="tdiv"></div>
+ <button class="ti" id="stNote"><svg viewBox="0 0 24 24"><path d="M4 4h12l4 4v12H4z"/><path d="M8 12h8M8 16h5"/></svg>Note</button>
+ <button class="ti" id="stCopy"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copy</button>
+</div>
+
+<!-- footnote popover -->
+<div id="fnpop"></div>
+
+<!-- listen bar -->
+<div id="listen">
+ <button class="ap-step" id="lPrev" title="Previous paragraph"><svg viewBox="0 0 24 24"><path d="M18 5v14l-9-7zM7 5h-2v14h2z"/></svg></button>
+ <button class="ap-play" id="lPlay" title="Play / pause"><svg class="ico-play" viewBox="0 0 24 24"><path d="M7 5v14l12-7z"/></svg><svg class="ico-pause" viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg></button>
+ <button class="ap-step" id="lNext" title="Next paragraph"><svg viewBox="0 0 24 24"><path d="M6 5v14l9-7zM17 5h2v14h-2z"/></svg></button>
+ <div class="ap-main">
+   <div class="ap-title"><span>Read aloud <em id="lEngine" style="color:var(--ink-soft)"></em></span><span class="ap-pos" id="lPos">¶ — / 245</span></div>
+   <div class="ap-rail" id="lRail"><div class="ap-fill" id="lFill"></div></div>
+ </div>
+ <button class="ap-cfg" id="lCfg">Voice</button>
+ <button class="ap-close" id="lClose">&times;</button>
+</div>
+<div id="listenCfg">
+ <div class="row"><label for="voiceSel">Voice</label><select id="voiceSel"></select></div>
+ <div class="row"><label for="rateSel">Speed <span id="rateVal">1.0×</span></label><input type="range" id="rateSel" min="0.7" max="1.5" step="0.05" value="1"></div>
+ <div class="note-mini">This uses your device's built-in voices (offline, private). An <b>authentic Pope Leo XIV voice is not available</b> as a tool — cloning a real person's voice without consent is off-limits. If an official narration recording is ever released, drop it in as <code>audio/magnifica-narration.mp3</code> and this player will use it automatically.</div>
+</div>
+
+<!-- note editor modal -->
+<div class="modal" id="noteModal">
+ <div class="mbox">
+   <h3>Note</h3>
+   <div class="mref" id="mRef"></div>
+   <div class="mq" id="mQuote" style="display:none"></div>
+   <textarea id="mText" placeholder="Write your reflection, question, or cross-reference…"></textarea>
+   <div class="mfoot">
+     <button class="btn ghost" id="mDelete" style="margin-right:auto;display:none">Delete</button>
+     <button class="btn ghost" id="mCancel">Cancel</button>
+     <button class="btn" id="mSave">Save note</button>
+   </div>
+ </div>
+</div>
+
+<!-- easter egg modal -->
+<div class="modal" id="eggModal">
+ <div class="mbox egg-card">
+   <svg class="shoe" width="180" height="96" viewBox="0 0 180 96" aria-label="Pope Nike sneaker">
+     <defs><linearGradient id="gld" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3e6bf"/><stop offset="1" stop-color="#cB9a4e"/></linearGradient></defs>
+     <path d="M8 70 Q10 50 30 48 L70 44 Q92 30 120 34 Q150 38 168 58 Q174 64 170 72 L168 76 Q166 80 158 80 L18 80 Q8 80 8 70Z" fill="#fbfbf7" stroke="#d8cdb3" stroke-width="2"/>
+     <path d="M8 76 L172 74 Q176 80 170 86 L14 86 Q6 84 8 76Z" fill="url(#gld)" stroke="#b08d57" stroke-width="1.5"/>
+     <path d="M40 60 Q90 30 150 56 Q120 52 96 56 Q66 60 40 60Z" fill="#7c2230"/>
+     <path d="M150 56 L138 64 L154 60Z" fill="#7c2230"/>
+     <path d="M96 22 l4 9 9 1 -7 6 2 9 -8 -5 -8 5 2 -9 -7 -6 9 -1z" fill="url(#gld)" stroke="#b08d57" stroke-width=".6"/>
+     <text x="44" y="74" font-family="EB Garamond,serif" font-size="9" fill="#b08d57" letter-spacing="2">POPE</text>
+   </svg>
+   <h3>Holy Soles &#128591;&#128095;</h3>
+   <p>A little wink: in 2026 the internet noticed Pope Leo XIV — a Chicago native — wearing a box-fresh pair of white <b>Nike Franchise Low</b> sneakers under his cassock in the Vatican's <em>“Leone a Roma”</em> documentary. Sneakerheads promptly blessed the moment, and the parody “Pope Nikes” (custom papal swoosh) was born.</p>
+   <img class="photo" id="eggPhoto" alt="Pope Leo XIV in Nike sneakers">
+   <div class="drophint" id="eggHint">Want the real photo here instead of this drawing? Drop a file named <code>images/pope-nikes.jpg</code> into the repo — it'll appear automatically.<br>HQ source found: <a href="https://justfreshkicks.com/pope-leo-nike/" target="_blank" rel="noopener">justfreshkicks.com/pope-leo-nike</a> (2560&times;1711).</div>
+   <div class="mfoot"><button class="btn" data-close-egg>Amen &#128591;</button></div>
+ </div>
+</div>
+
+<div id="toast"></div>
+
+<main><div id="doc"></div></main>
+
+<script id="docdata" type="application/json">__DOC_JSON__</script>
+<script>
+"use strict";
+const DOC = JSON.parse(document.getElementById('docdata').textContent);
+const NS='mh2026:';
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const store={
+  get(k,d){try{const v=localStorage.getItem(NS+k);return v==null?d:JSON.parse(v)}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(NS+k,JSON.stringify(v))}catch(e){}}
+};
+
+/* ---------- annotations model ---------- */
+let A=store.get('annos',{highlights:[],notes:[],bookmarks:[]});
+A.highlights=A.highlights||[];A.notes=A.notes||[];A.bookmarks=A.bookmarks||[];
+const saveA=()=>store.set('annos',A);
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+
+/* ---------- render document ---------- */
+const chapters=[]; // {id,label,title,el}
+const sections=[]; // {id,title,level,chapterIdx}
+function render(){
+  const doc=$('#doc');
+  // cover
+  const m=DOC.meta;
+  const wc=DOC.nodes.reduce((s,n)=>s+(n.html?n.html.replace(/<[^>]+>/g,'').split(/\s+/).length:0),0);
+  const mins=Math.round(wc/220);
+  const paraCount=DOC.nodes.filter(n=>n.type==='para').length;
+  const langs=(m.languages||[]).map(l=>`<a class="ll" href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`).join('');
+  const cover=document.createElement('section');cover.className='cover';
+  cover.innerHTML=`
+    <div class="portrait"><div class="pin" id="coverPortrait"><svg style="color:var(--gold-deep)"><use href="#sym-keys"/></svg></div></div>
+    <div class="kicker">${m.descriptor||m.kind}</div>
+    <div class="pope">${m.pope}</div>
+    <h1>Magnifica<br>Humanitas</h1>
+    <div class="sub">${m.subtitle}</div>
+    <div class="rule-orn"><span class="ln"></span><svg><use href="#sym-orn"/></svg><span class="ln r"></span></div>
+    <div class="stats">
+      <div class="stat"><b>${paraCount}</b><span>Paragraphs</span></div>
+      <div class="stat"><b>${DOC.footnotes.length}</b><span>Footnotes</span></div>
+      <div class="stat"><b>~${mins}</b><span>Min read</span></div>
+      <div class="stat"><b>${chaptersExpected()}</b><span>Movements</span></div>
+    </div>
+    <div class="meta">Given at ${m.place} · ${m.date}</div>
+    <div class="cover-actions">
+      <button class="btn" id="beginBtn"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg> Begin reading</button>
+      <button class="btn ghost" id="resumeBtn" style="display:none"></button>
+      <a class="btn ghost" href="magnifica-humanitas.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><path d="M9 13h6M9 17h6"/></svg> Official PDF</a>
+      <a class="btn ghost" href="${m.video}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20 6 4"/></svg> Watch the signing</a>
+    </div>
+    <div class="langrow">Read the official text · ${langs}</div>
+    <div class="scrolltip">scroll &#8595;</div>`;
+  doc.appendChild(cover);
+
+  let chIdx=-1, secCount=0, leadPending=false;
+  DOC.nodes.forEach(n=>{
+    if(n.type==='chapter'){
+      chIdx++;
+      const h=document.createElement('div');h.className='chapter-head';h.id=n.id;
+      const sym=/INTRODUCTION/i.test(n.label)?'sym-keys':/CONCLUSION/i.test(n.label)?'sym-star':'sym-chirho';
+      h.innerHTML=`<div class="csym"><svg viewBox="0 0 60 64" style="width:100%;height:100%"><use href="#${sym}"/></svg></div>
+        <div class="clabel">${n.label}</div><div class="ctitle">${n.title}</div>
+        <div class="corn"><span class="ln"></span><svg><use href="#sym-orn"/></svg><span class="ln r"></span></div>`;
+      doc.appendChild(h);
+      chapters.push({id:n.id,label:n.label,title:n.title,el:h,secs:[]});
+      leadPending=true;
+    }else if(n.type==='section'){
+      const id='sec'+(secCount++);
+      const h=document.createElement('h3');h.className='section lvl'+(n.level||1);h.id=id;h.innerHTML=n.html;
+      doc.appendChild(h);
+      const s={id,title:h.textContent,level:n.level||1,chIdx};
+      sections.push(s); if(chapters[chIdx])chapters[chIdx].secs.push(s);
+    }else if(n.type==='para'){
+      const d=document.createElement('div');d.className='para'+(leadPending?' lead':'');
+      d.id='p'+n.n;d.dataset.n=n.n;
+      d.innerHTML=`<div class="gutter"><button class="pnum" data-n="${n.n}" title="¶${n.n} · bookmark / note">${n.n}</button></div><div class="para-body">${n.html}</div>`;
+      doc.appendChild(d);
+      leadPending=false;
+    }else if(n.type==='sig'){
+      const d=document.createElement('div');d.className='sig'+(/LEO/.test(n.html)?' name':'');d.innerHTML=n.html;
+      doc.appendChild(d);
+    }
+  });
+
+  // footnotes
+  const fns=document.createElement('section');fns.id='fnsec';
+  fns.innerHTML='<h4>Notes</h4>'+DOC.footnotes.map(f=>
+    `<div class="fn" id="fn-${f.n}"><span class="fnn">${f.n}</span><div>${f.html} <a class="back" href="#fnref-${f.n}-0" title="Back to text">&#8617;</a></div></div>`).join('');
+  doc.appendChild(fns);
+
+  // doc footer
+  const ft=document.createElement('div');ft.className='docfoot';
+  ft.innerHTML=`<div class="footmark"><svg viewBox="0 0 100 122"><use href="#sym-keys"/></svg></div>
+    Reader's edition prepared for personal study &amp; note-taking.<br>
+    Official text &copy; Dicastery for Communication — Libreria Editrice Vaticana.
+    <a href="${m.source}" target="_blank" rel="noopener">Source on vatican.va</a>.<br>
+    <button class="egg" id="eggBtn" title="?">&#128095;</button>`;
+  doc.appendChild(ft);
+}
+function chaptersExpected(){return DOC.nodes.filter(n=>n.type==='chapter').length}
+
+/* ---------- text-node range engine (offsets over textContent) ---------- */
+function textNodes(container){
+  const w=document.createTreeWalker(container,NodeFilter.SHOW_TEXT,null);
+  const out=[];let node;while((node=w.nextNode()))out.push(node);return out;
+}
+function offsetOf(container,node,off){
+  let pos=0;for(const t of textNodes(container)){if(t===node)return pos+off;pos+=t.nodeValue.length;}return pos;
+}
+function wrapRange(container,start,end,make){
+  const targets=[];let pos=0;
+  for(const t of textNodes(container)){
+    const ns=pos,ne=pos+t.nodeValue.length;pos=ne;
+    const s=Math.max(start,ns),e=Math.min(end,ne);
+    if(e>s)targets.push({node:t,ls:s-ns,le:e-ns});
+  }
+  // wrap from last to first so earlier offsets stay valid
+  for(let i=targets.length-1;i>=0;i--){
+    const {node,ls,le}=targets[i];
+    const r=document.createRange();r.setStart(node,ls);r.setEnd(node,le);
+    const mk=make();try{r.surroundContents(mk);}catch(e){}
+  }
+}
+
+/* ---------- highlights ---------- */
+function applyHighlight(h){
+  const para=$('#p'+h.paraN);if(!para)return;
+  const body=$('.para-body',para);
+  wrapRange(body,h.start,h.end,()=>{
+    const mk=document.createElement('mark');mk.className='hl hl-'+h.color+(h.note?' has-note':'');
+    mk.dataset.hid=h.id;return mk;
+  });
+}
+function renderAllHighlights(){
+  // group by paragraph, apply in ascending order
+  const byP={};A.highlights.forEach(h=>{(byP[h.paraN]=byP[h.paraN]||[]).push(h)});
+  Object.values(byP).forEach(list=>{list.sort((a,b)=>a.start-b.start);list.forEach(applyHighlight)});
+}
+function removeHighlight(id){
+  $$('mark[data-hid="'+id+'"]').forEach(mk=>{
+    const p=mk.parentNode;while(mk.firstChild)p.insertBefore(mk.firstChild,mk);p.removeChild(mk);p.normalize();
+  });
+  A.highlights=A.highlights.filter(h=>h.id!==id);saveA();refreshNotes();
+}
+
+/* ---------- bookmarks / note indicators ---------- */
+function refreshIndicators(){
+  $$('.para').forEach(p=>{
+    const n=+p.dataset.n;
+    p.classList.toggle('bookmarked',A.bookmarks.includes(n));
+    const hasNote=A.notes.some(x=>x.paraN===n)||A.highlights.some(h=>h.paraN===n&&h.note);
+    p.classList.toggle('has-note',hasNote);
+  });
+}
+
+/* ---------- selection toolbar ---------- */
+const seltool=$('#seltool');let curSel=null;
+function clearSelToolSoon(){setTimeout(()=>{if(!window.getSelection().toString())hideSelTool()},10)}
+function hideSelTool(){seltool.classList.remove('show');curSel=null}
+document.addEventListener('selectionchange',clearSelToolSoon);
+document.addEventListener('mouseup',e=>{
+  if(seltool.contains(e.target))return;
+  const sel=window.getSelection();
+  const txt=sel.toString().trim();
+  if(!txt||sel.rangeCount===0){hideSelTool();return;}
+  const r=sel.getRangeAt(0);
+  const body=r.startContainer.parentElement&&r.startContainer.parentElement.closest('.para-body');
+  const bodyEnd=r.endContainer.parentElement&&r.endContainer.parentElement.closest('.para-body');
+  if(!body||body!==bodyEnd){hideSelTool();return;}
+  const para=body.closest('.para');
+  const start=offsetOf(body,r.startContainer,r.startOffset);
+  const end=offsetOf(body,r.endContainer,r.endOffset);
+  if(end<=start){hideSelTool();return;}
+  curSel={paraN:+para.dataset.n,start,end,text:txt};
+  const rect=r.getBoundingClientRect();
+  seltool.classList.add('show');
+  const tw=seltool.offsetWidth||250;
+  let x=rect.left+window.scrollX+rect.width/2-tw/2;
+  x=Math.max(8,Math.min(x,window.innerWidth-tw-8));
+  seltool.style.left=x+'px';
+  seltool.style.top=(rect.top+window.scrollY-seltool.offsetHeight-8)+'px';
+});
+$$('#seltool .hc').forEach(c=>c.addEventListener('mousedown',e=>{
+  e.preventDefault();if(!curSel)return;
+  const h={id:uid(),paraN:curSel.paraN,start:curSel.start,end:curSel.end,color:c.dataset.hl,text:curSel.text,note:''};
+  A.highlights.push(h);saveA();applyHighlight(h);refreshNotes();window.getSelection().removeAllRanges();hideSelTool();
+}));
+$('#stCopy').addEventListener('mousedown',e=>{e.preventDefault();if(curSel)navigator.clipboard&&navigator.clipboard.writeText(curSel.text);toast('Copied to clipboard');hideSelTool()});
+$('#stNote').addEventListener('mousedown',e=>{
+  e.preventDefault();if(!curSel)return;
+  const h={id:uid(),paraN:curSel.paraN,start:curSel.start,end:curSel.end,color:'gold',text:curSel.text,note:''};
+  A.highlights.push(h);saveA();applyHighlight(h);
+  window.getSelection().removeAllRanges();hideSelTool();openNote({type:'hl',id:h.id});
+});
+
+/* ---------- click handlers (delegation) ---------- */
+$('#doc').addEventListener('click',e=>{
+  const mk=e.target.closest('mark.hl');
+  if(mk){openNote({type:'hl',id:mk.dataset.hid});return;}
+  const pn=e.target.closest('.pnum');
+  if(pn){paraMenu(+pn.dataset.n,pn);return;}
+  const fr=e.target.closest('sup.fnref a');
+  if(fr){e.preventDefault();showFnPop(fr.dataset.fn,fr);return;}
+});
+
+/* paragraph quick menu: toggle bookmark or add note */
+function paraMenu(n,anchor){
+  // simple: bookmark toggles; shift/long -> note. Use a tiny inline choice via toast buttons.
+  const isBm=A.bookmarks.includes(n);
+  if(isBm)A.bookmarks=A.bookmarks.filter(x=>x!==n);else A.bookmarks.push(n);
+  saveA();refreshIndicators();refreshNotes();
+  toast(isBm?('Removed bookmark ¶'+n):('Bookmarked ¶'+n),'Add note',()=>openNote({type:'para',paraN:n}));
+}
+
+/* ---------- footnote popover ---------- */
+const fnpop=$('#fnpop');
+function showFnPop(num,anchor){
+  const f=DOC.footnotes.find(x=>+x.n===+num);if(!f)return;
+  fnpop.innerHTML=`<div class="fnp-h"><span>Note ${num}</span><span><a href="#fn-${num}" id="fnGoto">full list &#8595;</a> &nbsp; <span class="x" id="fnClose">&times;</span></span></div><div>${f.html}</div>`;
+  fnpop.classList.add('show');
+  const rect=anchor.getBoundingClientRect();
+  const pw=fnpop.offsetWidth;
+  let x=rect.left+window.scrollX-pw/2;x=Math.max(10,Math.min(x,window.innerWidth-pw-10));
+  let y=rect.bottom+window.scrollY+8;
+  fnpop.style.left=x+'px';fnpop.style.top=y+'px';
+  $('#fnClose').onclick=()=>fnpop.classList.remove('show');
+  $('#fnGoto').onclick=()=>{fnpop.classList.remove('show')};
+}
+document.addEventListener('click',e=>{if(!fnpop.contains(e.target)&&!e.target.closest('sup.fnref'))fnpop.classList.remove('show')});
+
+/* ---------- note modal ---------- */
+const noteModal=$('#noteModal');let noteCtx=null;
+function openNote(ctx){
+  noteCtx=ctx;let quote='',ref='',existing='';
+  if(ctx.type==='hl'){const h=A.highlights.find(x=>x.id===ctx.id);if(!h)return;quote=h.text;ref='Highlight · ¶'+h.paraN;existing=h.note||'';}
+  else{ref='Paragraph ¶'+ctx.paraN;const nt=A.notes.find(x=>x.paraN===ctx.paraN);if(ctx.id){const e2=A.notes.find(x=>x.id===ctx.id);existing=e2?e2.text:''}else if(nt){ctx.id=nt.id;existing=nt.text}}
+  $('#mRef').textContent=ref;
+  const q=$('#mQuote');if(quote){q.style.display='block';q.textContent='“'+quote+'”'}else q.style.display='none';
+  $('#mText').value=existing;
+  $('#mDelete').style.display=existing?'inline-flex':'none';
+  noteModal.classList.add('show');setTimeout(()=>$('#mText').focus(),50);
+}
+function closeNote(){noteModal.classList.remove('show');noteCtx=null}
+$('#mCancel').onclick=closeNote;
+$('#mSave').onclick=()=>{
+  const txt=$('#mText').value.trim();
+  if(noteCtx.type==='hl'){const h=A.highlights.find(x=>x.id===noteCtx.id);if(h){h.note=txt;$$('mark[data-hid="'+h.id+'"]').forEach(m=>m.classList.toggle('has-note',!!txt))}}
+  else{
+    if(noteCtx.id){const nt=A.notes.find(x=>x.id===noteCtx.id);if(nt)nt.text=txt}
+    else if(txt){A.notes.push({id:uid(),paraN:noteCtx.paraN,text:txt,created:Date.now()})}
+  }
+  saveA();refreshIndicators();refreshNotes();closeNote();toast('Saved');
+};
+$('#mDelete').onclick=()=>{
+  if(noteCtx.type==='hl'){const h=A.highlights.find(x=>x.id===noteCtx.id);if(h)h.note='';$$('mark[data-hid="'+noteCtx.id+'"]').forEach(m=>m.classList.remove('has-note'))}
+  else if(noteCtx.id){A.notes=A.notes.filter(x=>x.id!==noteCtx.id)}
+  saveA();refreshIndicators();refreshNotes();closeNote();
+};
+
+/* ---------- notes panel ---------- */
+let curTab='all';
+function chapterTitleForPara(n){
+  let best=null;for(const c of chapters){const first=firstParaIn(c);if(first!=null&&first<=n)best=c;}
+  return best?best.title:'';
+}
+function firstParaIn(c){let el=c.el.nextElementSibling;while(el){if(el.classList&&el.classList.contains('para'))return +el.dataset.n;if(el.classList&&el.classList.contains('chapter-head'))return null;el=el.nextElementSibling}return null}
+function refreshNotes(){
+  const list=$('#notesList');
+  let items=[];
+  A.highlights.forEach(h=>items.push({kind:'hl',paraN:h.paraN,quote:h.text,text:h.note||'',color:h.color,id:h.id}));
+  A.notes.forEach(n=>items.push({kind:'note',paraN:n.paraN,text:n.text,id:n.id}));
+  A.bookmarks.forEach(n=>items.push({kind:'bm',paraN:n}));
+  items.sort((a,b)=>a.paraN-b.paraN);
+  if(curTab==='hl')items=items.filter(i=>i.kind==='hl');
+  if(curTab==='note')items=items.filter(i=>i.kind==='note'||(i.kind==='hl'&&i.text));
+  if(curTab==='bm')items=items.filter(i=>i.kind==='bm');
+  if(!items.length){list.innerHTML=`<div class="empty"><span class="big">&#9998;</span>No ${curTab==='all'?'annotations':curTab==='bm'?'bookmarks':curTab+'s'} yet.<br>Select any text to highlight, click a ¶ number to bookmark, and build your study notes here.</div>`;return}
+  list.innerHTML=items.map(i=>{
+    const ref=`¶${i.paraN} · ${chapterTitleForPara(i.paraN)}`;
+    const icon=i.kind==='bm'?'&#9873;':i.kind==='hl'?'&#9678;':'&#9998;';
+    let body='';
+    if(i.quote)body+=`<div class="nq">${esc(i.quote)}</div>`;
+    if(i.text)body+=`<div class="ntext">${esc(i.text)}</div>`;
+    if(i.kind==='bm'&&!i.text)body+=`<div class="ntext" style="color:var(--ink-soft)">Bookmarked</div>`;
+    return `<div class="note-card" data-go="${i.paraN}" data-kind="${i.kind}" data-id="${i.id||''}">
+      <div class="nref"><span>${icon} ${ref}</span><button class="del" title="Remove">&times;</button></div>${body}</div>`;
+  }).join('');
+}
+$('#notesList').addEventListener('click',e=>{
+  const card=e.target.closest('.note-card');if(!card)return;
+  if(e.target.closest('.del')){
+    const kind=card.dataset.kind,id=card.dataset.id,p=+card.dataset.go;
+    if(kind==='hl')removeHighlight(id);
+    else if(kind==='note'){A.notes=A.notes.filter(x=>x.id!==id);saveA();refreshIndicators();refreshNotes()}
+    else if(kind==='bm'){A.bookmarks=A.bookmarks.filter(x=>x!==p);saveA();refreshIndicators();refreshNotes()}
+    return;
+  }
+  closePanels();goPara(+card.dataset.go);
+});
+$$('.tab').forEach(t=>t.onclick=()=>{$$('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');curTab=t.dataset.tab;refreshNotes()});
+function esc(s){return (s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+
+function goPara(n){const el=$('#p'+n);if(el){el.scrollIntoView({behavior:'smooth',block:'center'});flash(el)}}
+function flash(el){el.style.transition='background .3s';const b=$('.para-body',el)||el;b.style.background='color-mix(in srgb,var(--gold) 28%,transparent)';setTimeout(()=>b.style.background='',900)}
+
+/* ---------- export / import ---------- */
+$('#expJson').onclick=()=>{
+  download('magnifica-notes-backup.json',JSON.stringify({doc:'Magnifica Humanitas',exported:new Date().toISOString(),annos:A},null,2));
+};
+$('#expMd').onclick=()=>{
+  let md=`# Magnifica Humanitas — My Study Notes\n\n*Pope Leo XIV · exported ${new Date().toLocaleDateString()}*\n\n`;
+  const byP={};
+  A.bookmarks.forEach(n=>{(byP[n]=byP[n]||{}).bm=true});
+  A.highlights.forEach(h=>{(byP[h.paraN]=byP[h.paraN]||{}).hl=((byP[h.paraN].hl)||[]).concat([h])});
+  A.notes.forEach(n=>{(byP[n.paraN]=byP[n.paraN]||{}).notes=((byP[n.paraN].notes)||[]).concat([n])});
+  Object.keys(byP).map(Number).sort((a,b)=>a-b).forEach(n=>{
+    md+=`## ¶${n} — ${chapterTitleForPara(n)}\n\n`;
+    if(byP[n].bm)md+=`> [bookmarked]\n\n`;
+    (byP[n].hl||[]).forEach(h=>{md+=`> ${h.text}\n`;if(h.note)md+=`\n  — ${h.note}\n`;md+=`\n`});
+    (byP[n].notes||[]).forEach(x=>{md+=`${x.text}\n\n`});
+  });
+  if(!Object.keys(byP).length)md+='_No annotations yet._\n';
+  download('magnifica-notes.md',md);
+};
+function download(name,text){const b=new Blob([text],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+$('#impBtn').onclick=()=>$('#impFile').click();
+$('#impFile').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;const rd=new FileReader();
+  rd.onload=()=>{try{const data=JSON.parse(rd.result);const inc=data.annos||data;
+    if(confirm('Merge imported notes with your current ones?')){
+      A.highlights=dedupe(A.highlights.concat(inc.highlights||[]));
+      A.notes=dedupe(A.notes.concat(inc.notes||[]));
+      A.bookmarks=[...new Set(A.bookmarks.concat(inc.bookmarks||[]))];
+    }else{A=inc}
+    saveA();location.reload();
+  }catch(err){alert('Could not read that file.')}};
+  rd.readAsText(f);
+};
+function dedupe(arr){const seen=new Set();return arr.filter(x=>{const k=x.id||JSON.stringify(x);if(seen.has(k))return false;seen.add(k);return true})}
+
+/* ---------- panels ---------- */
+const scrim=$('#scrim');
+function openPanel(p){closePanels();p.classList.add('open');scrim.classList.add('show');
+  if(p.id==='tocPanel')$('#btnToc').classList.add('on');
+  if(p.id==='notesPanel')$('#btnNotes').classList.add('on');
+}
+function closePanels(){$$('.panel').forEach(p=>p.classList.remove('open'));scrim.classList.remove('show');$$('.iconbtn').forEach(b=>b.classList.remove('on'))}
+scrim.onclick=closePanels;
+$$('[data-close]').forEach(b=>b.onclick=closePanels);
+$('#btnToc').onclick=()=>{$('#tocPanel').classList.contains('open')?closePanels():openPanel($('#tocPanel'))};
+$('#btnNotes').onclick=()=>{$('#notesPanel').classList.contains('open')?closePanels():(openPanel($('#notesPanel')),refreshNotes())};
+$('#btnSet').onclick=()=>{$('#setPanel').classList.contains('open')?closePanels():(closePanels(),$('#setPanel').classList.add('open'),scrim.classList.add('show'))};
+
+/* ---------- TOC ---------- */
+function buildTOC(){
+  const nav=$('#tocNav');
+  nav.innerHTML=chapters.map(c=>{
+    const secs=c.secs.map(s=>`<a class="toc-sec lvl${s.level}" href="#${s.id}" data-sec="${s.id}">${s.title}</a>`).join('');
+    return `<div class="toc-ch"><a href="#${c.id}" data-ch="${c.id}"><span class="cl">${c.label}</span>${c.title}</a>${secs}</div>`;
+  }).join('');
+  nav.addEventListener('click',e=>{const a=e.target.closest('a');if(a){closePanels()}});
+}
+
+/* ---------- scrollspy + progress + resume ---------- */
+const doc=$('#doc');let curPara=1;
+function onScroll(){
+  const st=window.scrollY,h=document.documentElement.scrollHeight-window.innerHeight;
+  const pct=Math.min(100,Math.max(0,st/h*100));
+  $('#progress').style.width=pct+'%';
+  $('#tocBar').style.width=pct+'%';$('#tocPct').textContent=Math.round(pct)+'%';
+  // current paragraph = last para whose top is above 40% viewport
+  const mid=window.innerHeight*0.32;let cur=null,curC=null,curS=null;
+  for(const p of paraEls){const r=p.getBoundingClientRect();if(r.top<=mid)cur=p;else break;}
+  if(cur){curPara=+cur.dataset.n;store.set('last',curPara)}
+  // active chapter/section
+  let ac=null,as=null;
+  for(const c of chapters){if(c.el.getBoundingClientRect().top<=mid)ac=c.id}
+  for(const s of sections){const el=document.getElementById(s.id);if(el&&el.getBoundingClientRect().top<=mid)as=s.id}
+  $$('#tocNav a[data-ch]').forEach(a=>a.classList.toggle('cur',a.dataset.ch===ac));
+  $$('#tocNav a[data-sec]').forEach(a=>a.classList.toggle('cur',a.dataset.sec===as));
+}
+let paraEls=[];
+let ticking=false;
+window.addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(()=>{onScroll();ticking=false});ticking=true}},{passive:true});
+
+/* ---------- settings ---------- */
+const S=store.get('settings',{theme:'ivory',font:'serif',sizeStep:0,lh:'1.78',justify:false,width:true});
+function applySettings(){
+  document.documentElement.setAttribute('data-theme',S.theme);
+  document.body.setAttribute('data-font',S.font);
+  document.body.setAttribute('data-justify',S.justify?'on':'off');
+  document.documentElement.style.setProperty('--fs',(1.21+S.sizeStep*0.07).toFixed(3)+'rem');
+  document.documentElement.style.setProperty('--lh',S.lh);
+  document.documentElement.style.setProperty('--measure',S.width?'38rem':'48rem');
+  $$('#segTheme button').forEach(b=>b.classList.toggle('on',b.dataset.theme===S.theme));
+  $$('#segFont button').forEach(b=>b.classList.toggle('on',b.dataset.font===S.font));
+  $$('#segLh button').forEach(b=>b.classList.toggle('on',b.dataset.lh===S.lh));
+  $('#tgJustify').classList.toggle('on',S.justify);
+  $('#tgWidth').classList.toggle('on',S.width);
+}
+function saveS(){store.set('settings',S)}
+$$('#segTheme button').forEach(b=>b.onclick=()=>{S.theme=b.dataset.theme;saveS();applySettings()});
+$$('#segFont button').forEach(b=>b.onclick=()=>{S.font=b.dataset.font;saveS();applySettings()});
+$$('#segLh button').forEach(b=>b.onclick=()=>{S.lh=b.dataset.lh;saveS();applySettings()});
+$$('#segSize button').forEach(b=>b.onclick=()=>{const a=b.dataset.size;if(a==='up')S.sizeStep=Math.min(6,S.sizeStep+1);else if(a==='dn')S.sizeStep=Math.max(-3,S.sizeStep-1);else S.sizeStep=0;saveS();applySettings()});
+$('#tgJustify').onclick=()=>{S.justify=!S.justify;saveS();applySettings()};
+$('#tgWidth').onclick=()=>{S.width=!S.width;saveS();applySettings()};
+
+/* ---------- search ---------- */
+const sb=$('#searchbar'),si=$('#searchInput');let hits=[],hi=-1;
+function openSearch(){sb.classList.add('open');setTimeout(()=>si.focus(),60)}
+function closeSearch(){sb.classList.remove('open');clearSearch();si.value=''}
+$('#btnSearch').onclick=()=>sb.classList.contains('open')?closeSearch():openSearch();
+$('#sClose').onclick=closeSearch;
+function clearSearch(){$$('mark.search-hit').forEach(m=>{const p=m.parentNode;while(m.firstChild)p.insertBefore(m.firstChild,m);p.removeChild(m);p.normalize()});hits=[];hi=-1;$('#scount').textContent=''}
+let stim;si.addEventListener('input',()=>{clearTimeout(stim);stim=setTimeout(runSearch,220)});
+function runSearch(){
+  clearSearch();const q=si.value.trim();if(q.length<2)return;
+  const rx=new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi');
+  paraEls.forEach(p=>{
+    const body=$('.para-body',p);
+    textNodes(body).forEach(t=>{
+      const s=t.nodeValue;if(!rx.test(s))return;rx.lastIndex=0;
+      const frag=document.createDocumentFragment();let last=0,m;
+      while((m=rx.exec(s))){frag.appendChild(document.createTextNode(s.slice(last,m.index)));
+        const mk=document.createElement('mark');mk.className='search-hit';mk.textContent=m[0];frag.appendChild(mk);last=m.index+m[0].length;if(m.index===rx.lastIndex)rx.lastIndex++;}
+      frag.appendChild(document.createTextNode(s.slice(last)));
+      t.parentNode.replaceChild(frag,t);
+    });
+  });
+  hits=$$('mark.search-hit');$('#scount').textContent=hits.length?('1 / '+hits.length):'no matches';
+  if(hits.length){hi=0;markCur()}
+}
+function markCur(){hits.forEach(h=>h.classList.remove('cur'));if(hi>=0&&hits[hi]){hits[hi].classList.add('cur');hits[hi].scrollIntoView({behavior:'smooth',block:'center'});$('#scount').textContent=(hi+1)+' / '+hits.length}}
+$('#sNext').onclick=()=>{if(hits.length){hi=(hi+1)%hits.length;markCur()}};
+$('#sPrev').onclick=()=>{if(hits.length){hi=(hi-1+hits.length)%hits.length;markCur()}};
+si.addEventListener('keydown',e=>{if(e.key==='Enter'){e.shiftKey?$('#sPrev').click():$('#sNext').click()}if(e.key==='Escape')closeSearch()});
+
+/* ---------- read aloud (Web Speech + optional narration file) ---------- */
+const listen=$('#listen');let speaking=false,readIdx=0,voices=[],narration=null,usingFile=false;
+const lPlay=$('#lPlay');
+function paraNums(){return paraEls.map(p=>+p.dataset.n)}
+function openListen(){listen.classList.add('open');$('#btnListen').classList.add('on');
+  // start at current paragraph
+  const nums=paraNums();readIdx=Math.max(0,nums.indexOf(curPara));updateListenUI();
+}
+function closeListen(){stopSpeak();listen.classList.remove('open');$('#listenCfg').classList.remove('show');$('#btnListen').classList.remove('on')}
+$('#btnListen').onclick=()=>listen.classList.contains('open')?closeListen():openListen();
+$('#lClose').onclick=closeListen;
+$('#lCfg').onclick=()=>$('#listenCfg').classList.toggle('show');
+function updateListenUI(){
+  const nums=paraNums();const n=nums[readIdx];
+  $('#lPos').textContent='¶ '+(n||'—')+' / '+nums[nums.length-1];
+  $('#lFill').style.width=((readIdx+1)/nums.length*100)+'%';
+}
+function highlightRead(){
+  $$('.para.active-read').forEach(p=>p.classList.remove('active-read'));
+  const n=paraNums()[readIdx];const el=$('#p'+n);
+  if(el){el.classList.add('active-read');el.scrollIntoView({behavior:'smooth',block:'center'})}
+}
+function speakCurrent(){
+  if(!('speechSynthesis'in window)){toast('Read-aloud needs a browser with speech support');return}
+  const nums=paraNums();if(readIdx>=nums.length){stopSpeak();return}
+  highlightRead();updateListenUI();
+  const el=$('#p'+nums[readIdx]);const text=$('.para-body',el).textContent;
+  const u=new SpeechSynthesisUtterance(text);
+  const vname=store.get('voice','');const v=voices.find(x=>x.name===vname);if(v)u.voice=v;u.lang=(v&&v.lang)||'en-US';
+  u.rate=+store.get('rate',1);
+  u.onend=()=>{if(speaking){readIdx++;if(readIdx<nums.length)speakCurrent();else stopSpeak()}};
+  speechSynthesis.speak(u);
+}
+function startSpeak(){speaking=true;lPlay.classList.add('playing');$('#lEngine').textContent='· device voice';speechSynthesis.cancel();speakCurrent()}
+function pauseSpeak(){speaking=false;lPlay.classList.remove('playing');speechSynthesis.cancel()}
+function stopSpeak(){speaking=false;lPlay.classList.remove('playing');if('speechSynthesis'in window)speechSynthesis.cancel();$$('.para.active-read').forEach(p=>p.classList.remove('active-read'))}
+lPlay.onclick=()=>{if(usingFile){return}speaking?pauseSpeak():startSpeak()};
+$('#lNext').onclick=()=>{readIdx=Math.min(paraNums().length-1,readIdx+1);if(speaking){speechSynthesis.cancel();speakCurrent()}else{highlightRead();updateListenUI()}};
+$('#lPrev').onclick=()=>{readIdx=Math.max(0,readIdx-1);if(speaking){speechSynthesis.cancel();speakCurrent()}else{highlightRead();updateListenUI()}};
+$('#lRail').onclick=e=>{const r=e.currentTarget.getBoundingClientRect();const pct=(e.clientX-r.left)/r.width;readIdx=Math.floor(pct*paraNums().length);if(speaking){speechSynthesis.cancel();speakCurrent()}else{highlightRead();updateListenUI()}};
+function loadVoices(){
+  if(!('speechSynthesis'in window))return;
+  voices=speechSynthesis.getVoices();
+  const sel=$('#voiceSel');const pref=voices.filter(v=>/^en/i.test(v.lang));const list=pref.length?pref:voices;
+  sel.innerHTML=list.map(v=>`<option value="${v.name}">${v.name} (${v.lang})</option>`).join('');
+  const saved=store.get('voice','');if(saved&&list.some(v=>v.name===saved))sel.value=saved;else if(list[0]){store.set('voice',list[0].name)}
+}
+if('speechSynthesis'in window){speechSynthesis.onvoiceschanged=loadVoices;loadVoices()}
+$('#voiceSel').onchange=e=>{store.set('voice',e.target.value);if(speaking){speechSynthesis.cancel();speakCurrent()}};
+$('#rateSel').oninput=e=>{store.set('rate',e.target.value);$('#rateVal').textContent=(+e.target.value).toFixed(2)+'×'};
+$('#rateSel').value=store.get('rate',1);$('#rateVal').textContent=(+store.get('rate',1)).toFixed(2)+'×';
+// optional official narration file (graceful)
+(function probeNarration(){
+  const a=new Audio();a.src='audio/magnifica-narration.mp3';
+  a.addEventListener('canplaythrough',()=>{usingFile=true;narration=a;$('#lEngine').textContent='· official narration';
+    lPlay.onclick=()=>{if(a.paused){a.play();lPlay.classList.add('playing')}else{a.pause();lPlay.classList.remove('playing')}};
+    a.ontimeupdate=()=>{if(a.duration)$('#lFill').style.width=(a.currentTime/a.duration*100)+'%'};
+  },{once:true});
+  a.load();
+})();
+
+/* ---------- easter egg ---------- */
+$('#doc').addEventListener('click',e=>{if(e.target.id==='eggBtn'||e.target.closest('#eggBtn'))openEgg()});
+function openEgg(){
+  const img=$('#eggPhoto');img.onload=()=>{img.style.display='block';$('#eggHint').style.display='none'};
+  img.onerror=()=>{img.style.display='none'};img.src='images/pope-nikes.jpg';
+  $('#eggModal').classList.add('show');
+}
+$$('[data-close-egg]').forEach(b=>b.onclick=()=>$('#eggModal').classList.remove('show'));
+$('#eggModal').addEventListener('click',e=>{if(e.target.id==='eggModal')e.currentTarget.classList.remove('show')});
+
+/* ---------- toast ---------- */
+let ttimer;function toast(msg,btn,cb){const t=$('#toast');t.innerHTML=esc(msg)+(btn?` <button id="tBtn">${esc(btn)}</button>`:'');t.classList.add('show');
+  if(btn)$('#tBtn').onclick=()=>{cb&&cb();t.classList.remove('show')};
+  clearTimeout(ttimer);ttimer=setTimeout(()=>t.classList.remove('show'),btn?5200:2200)}
+
+/* ---------- keyboard ---------- */
+document.addEventListener('keydown',e=>{
+  if(/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName))return;
+  if(e.key==='Escape'){closePanels();closeSearch();fnpop.classList.remove('show');noteModal.classList.remove('show');$('#eggModal').classList.remove('show');hideSelTool();return}
+  if(e.key==='/'){e.preventDefault();openSearch();return}
+  if(e.key==='t'){openPanel($('#tocPanel'));return}
+  if(e.key==='n'){openPanel($('#notesPanel'));refreshNotes();return}
+  if(e.key==='l'){listen.classList.contains('open')?closeListen():openListen();return}
+  if(e.key==='b'){paraMenu(curPara,$('#p'+curPara+' .pnum'));return}
+  if(e.key==='j'||e.key==='ArrowDown'){const nx=$('#p'+(curPara+1));if(nx){e.preventDefault();nx.scrollIntoView({behavior:'smooth',block:'center'})}}
+  if(e.key==='k'||e.key==='ArrowUp'){const pv=$('#p'+(curPara-1));if(pv){e.preventDefault();pv.scrollIntoView({behavior:'smooth',block:'center'})}}
+});
+
+/* ---------- boot ---------- */
+render();
+paraEls=$$('.para');
+buildTOC();
+applySettings();
+renderAllHighlights();
+refreshIndicators();
+refreshNotes();
+onScroll();
+$('#beginBtn').onclick=()=>{const f=chapters[0];if(f)f.el.scrollIntoView({behavior:'smooth'})};
+// Cover portrait: prefer a local drop-in (images/leo-xiv.jpg, works offline),
+// else the official vatican.va portrait (when online), else the gold emblem.
+(function loadPortrait(){
+  const pin=$('#coverPortrait');if(!pin)return;
+  const sources=['images/leo-xiv.jpg',
+    'https://www.vatican.va/etc/designs/vatican/library/clientlibs/themes/vatican-v2/images/leo-xiv.png'];
+  let i=0;
+  const tryNext=()=>{
+    if(i>=sources.length)return;            // keep the emblem fallback
+    const img=new Image();
+    img.onload=()=>{pin.innerHTML='';img.alt='His Holiness Pope Leo XIV';pin.appendChild(img)};
+    img.onerror=()=>{i++;tryNext()};
+    img.src=sources[i];
+  };
+  tryNext();
+})();
+// resume
+const last=store.get('last',0);
+if(last>1){const rb=$('#resumeBtn');rb.style.display='inline-flex';rb.innerHTML='Resume at ¶'+last;rb.onclick=()=>goPara(last);
+  setTimeout(()=>toast('Welcome back — continue at ¶'+last,'Resume',()=>goPara(last)),700);}
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+{
+ "description": "Whole-word pronunciation substitutions for Magnifica Humanitas (use for engines without a lexicon, e.g. OpenAI/local).",
+ "respellings": {
+  "Magnifica Humanitas": "mahg-NIFF-ee-kah hoo-MAH-nee-tahss",
+  "Rerum Novarum": "RAY-room noh-VAH-room",
+  "Gaudium et Spes": "GOW-dee-um et SPESS",
+  "Populorum Progressio": "pop-oo-LOH-room pro-GRESS-ee-oh",
+  "Laudato Si": "low-DAH-toh SEE",
+  "Fratelli Tutti": "frah-TELL-ee TOO-tee",
+  "Magnificat": "mahg-NIFF-ee-kaht",
+  "res novae": "RAYSS NOH-veye",
+  "res publica": "RAYSS POO-blee-kah",
+  "rerum novarum": "RAY-room noh-VAH-room",
+  "Mater et Magistra": "MAH-ter et mah-JEE-strah",
+  "Pacem in Terris": "PAH-chem in TER-reess",
+  "Dignitatis Humanae": "deeg-nee-TAH-tiss hoo-MAH-nigh",
+  "Octogesima Adveniens": "ok-toh-JEH-zee-mah ad-VEN-ee-ens",
+  "Laborem Exercens": "lah-BOH-rem EX-er-chens",
+  "Sollicitudo Rei Socialis": "sol-ee-chee-TOO-doh RAY-ee soh-chee-AH-liss",
+  "Centesimus Annus": "chen-TEH-zee-mooss AHN-nooss",
+  "Caritas in Veritate": "KAH-ree-tahss in veh-ree-TAH-teh",
+  "Evangelii Gaudium": "eh-vahn-JEH-lee-ee GOW-dee-um",
+  "Dilexit Nos": "dee-LEX-it nohss",
+  "Dignitas Infinita": "DEEG-nee-tahss in-fee-NEE-tah",
+  "Quadragesima Anno": "kwah-drah-JEH-zee-mah AHN-noh",
+  "Divini Redemptoris": "dee-VEE-nee reh-demp-TOH-riss",
+  "Iustitia et Pax": "yoo-STEE-tee-ah et pahks",
+  "Lumen Gentium": "LOO-men JEN-tee-um",
+  "In Illo uno unum": "in EEL-loh OO-noh OO-noom",
+  "Mit Brennender Sorge": "mit BREN-en-der ZOR-guh",
+  "Non Abbiamo Bisogno": "non ab-YAH-moh bee-ZON-yoh",
+  "Shema Yisrael": "sh' MAH yiss-rah-ELL",
+  "Realpolitik": "ray-AHL-poh-lee-teek",
+  "détente": "day-TAHNT",
+  "Magna Carta": "MAG-nah CAR-tah",
+  "corpus": "KOR-pooss",
+  "de facto": "day FAK-toh"
+ },
+ "spoken_ordinals_example": {
+  "Leo XIV": "Leo the Fourteenth",
+  "John Paul II": "John Paul the Second"
+ }
+}
