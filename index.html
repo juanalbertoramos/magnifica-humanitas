@@ -67,6 +67,20 @@ body[data-font="sans"]{--serif:var(--ui);--display:var(--ui);--title:var(--ui);-
 .goldframe i.bl{bottom:5px;left:5px;border-right:0;border-top:0}
 .goldframe i.br{bottom:5px;right:5px;border-left:0;border-top:0}
 @media(max-width:680px){.goldframe{display:none}}
+
+/* persistent back-to-top control: subtle gold circle, fixed bottom-right */
+.topbtn{position:fixed;right:24px;bottom:24px;z-index:130;
+  width:44px;height:44px;border-radius:50%;
+  background:color-mix(in srgb,var(--panel) 88%,transparent);
+  border:1px solid color-mix(in srgb,var(--gold) 35%,transparent);
+  color:var(--gold-deep);cursor:pointer;
+  display:grid;place-items:center;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  box-shadow:0 4px 14px var(--shadow);
+  transition:transform .18s,background .18s,color .18s,border-color .18s}
+.topbtn:hover{transform:translateY(-2px);color:var(--accent);border-color:var(--gold-deep);background:var(--panel)}
+.topbtn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:680px){.topbtn{right:14px;bottom:14px;width:40px;height:40px}}
+@media print{.topbtn{display:none}}
 body[data-justify="on"] .para-body{text-align:justify;hyphens:auto}
 a{color:var(--link);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--link) 30%,transparent)}
 a:hover{border-bottom-color:var(--link)}
@@ -398,6 +412,7 @@ sup.fnref a:hover{text-decoration:underline}
 </head>
 <body data-font="serif" data-justify="off">
 <div class="goldframe"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div>
+<button id="topBtn" class="topbtn" aria-label="Back to top" title="Back to top"><svg viewBox="0 0 24 24"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg></button>
 <div id="progress"></div>
 
 <!-- ── Heraldic symbol library (gold line-art) ── -->
@@ -973,7 +988,10 @@ function onScroll(){
   // current paragraph = last para whose top is above 40% viewport
   const mid=window.innerHeight*0.32;let cur=null,curC=null,curS=null;
   for(const p of paraEls){const r=p.getBoundingClientRect();if(r.top<=mid)cur=p;else break;}
-  if(cur){curPara=+cur.dataset.n;store.set('last',curPara)}
+  if(cur){curPara=+cur.dataset.n}
+  // NOTE: 'last' is persisted on pagehide / visibilitychange:hidden (see below).
+  // Stamping on every scroll tick erased the resume position when the user
+  // scrolled back up to the cover.
   // active chapter/section
   let ac=null,as=null;
   for(const c of chapters){if(c.el.getBoundingClientRect().top<=mid)ac=c.id}
@@ -984,6 +1002,13 @@ function onScroll(){
 let paraEls=[];
 let ticking=false;
 window.addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(()=>{onScroll();ticking=false});ticking=true}},{passive:true});
+
+// Persist the resume position when the user actually leaves the tab — not on
+// every scroll tick (that erased it when scrolling back to the cover).
+function persistLast(){if(curPara>1)store.set('last',curPara)}
+window.addEventListener('pagehide',persistLast);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')persistLast()});
+$('#topBtn').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
 
 /* ---------- settings ---------- */
 const S=store.get('settings',{theme:'ivory',font:'serif',sizeStep:0,lh:'1.78',justify:false,width:true});
