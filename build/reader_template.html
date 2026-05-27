@@ -1084,9 +1084,13 @@ const Player={
       this._syncChapter();
       $('#voiceRow').style.display='none';
       $('#voiceNote').innerHTML='Plays the bundled 4-hour narration (Kokoro <i>bm_george</i>, 32 kbps mono, with chapter markers). Speed below adjusts playback rate; everything stays on your device.';
+      $('#lPrev').title='Back 30 seconds';
+      $('#lNext').title='Forward 30 seconds';
     }else{
       lEngine.textContent='speechSynthesis'in window?'· device voice':'';
       $('#voiceRow').style.display='';
+      $('#lPrev').title='Previous paragraph';
+      $('#lNext').title='Next paragraph';
     }
     this._syncUI();
   },
