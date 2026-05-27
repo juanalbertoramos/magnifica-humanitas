@@ -28,8 +28,8 @@ SLUGS=(00-introduction 01-chapter-one 02-chapter-two 03-chapter-three 04-chapter
 : > tmp/concat.txt
 for s in "${SLUGS[@]}"; do
   [ -f "$IN/$s.mp3" ] || { echo "missing $IN/$s.mp3"; exit 1; }
-  ffmpeg -y -i "$IN/$s.mp3" -af loudnorm=I=-16:TP=-1.5:LRA=11 -ar 44100 "tmp/$s.norm.mp3"
-  echo "file 'tmp/$s.norm.mp3'" >> tmp/concat.txt
+  ffmpeg -y -i "$IN/$s.mp3" -af loudnorm=I=-16:TP=-1.5:LRA=11 -ac 1 -ar 24000 "tmp/$s.norm.mp3"
+  echo "file '$s.norm.mp3'" >> tmp/concat.txt
 done
 
 # 2. build ffmetadata with chapter markers (uses normalized durations)
@@ -47,7 +47,7 @@ for i in "${!SLUGS[@]}"; do
 done
 
 # 3. concat + attach chapter metadata
-ffmpeg -y -f concat -safe 0 -i tmp/concat.txt -i tmp/meta.txt -map_metadata 1 -c:a libmp3lame -q:a 3 "$FINAL"
+ffmpeg -y -f concat -safe 0 -i tmp/concat.txt -i tmp/meta.txt -map_metadata 1 -c:a libmp3lame -b:a 32k -ac 1 -ar 24000 "$FINAL"
 rm -rf tmp
 echo "Done -> $FINAL"
 echo "Open magnifica-humanitas.html and the 'Read aloud' player will use it automatically."

@@ -3,3 +3,9 @@
 *.tmp
 node_modules/
 .claude/
+
+# Local TTS scratch space (large model files + python venv)
+.venv-kokoro/
+models/
+narration/out/
+narration/tmp/
