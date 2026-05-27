@@ -1,13 +1,40 @@
 #!/usr/bin/env python3
-import json, re, html as htmllib
+"""Parse the Firecrawl-extracted Vatican markdown of Magnifica Humanitas into
+the structured JSON the reader consumes (build/magnifica.json).
 
-md = json.loads(open('/tmp/magnifica_full.md.json').read())['markdown'] if False else open('/tmp/magnifica_full.md').read()
+Source default: vatican-source/magnifica-humanitas.firecrawl.md (committed).
+Override with: python3 build/parse_encyclical.py path/to/source.md [path/to/out.json]
+"""
+import json, os, re, sys, html as htmllib
+
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SRC  = sys.argv[1] if len(sys.argv) > 1 else os.path.join(REPO, 'vatican-source', 'magnifica-humanitas.firecrawl.md')
+OUT  = sys.argv[2] if len(sys.argv) > 2 else os.path.join(REPO, 'build', 'magnifica.json')
+
+md = open(SRC).read()
 lines = md.split('\n')
 
-BODY_START = 171          # '**INTRODUCTION**'
-SEP = lines.index('* * *') # footnote separator
+# Locate the body by semantic markers — the first standalone '**INTRODUCTION**'
+# line (the TOC link version earlier in the file has [INTRODUCTION](...) inside).
+BODY_START = next(
+    (i for i, ln in enumerate(lines) if ln.strip() == '**INTRODUCTION**'),
+    None,
+)
+if BODY_START is None:
+    sys.exit(f"could not find '**INTRODUCTION**' marker in {SRC}")
+# The horizontal-rule '* * *' separates the body from the footnote section.
+try:
+    SEP = lines.index('* * *', BODY_START)
+except ValueError:
+    sys.exit(f"could not find '* * *' footnote separator in {SRC}")
 body_lines = lines[BODY_START:SEP]
 fn_lines = lines[SEP+1:]
+
+# Repair a known defect in the upstream Vatican source: a stray "\[10\]"
+# appears immediately after footnote 110's reference in ¶82. Strip any
+# such "\[N\]" that directly follows a "](#_ftnM)" footnote link.
+_STRAY_FN_RE = re.compile(r'(\]\([^)]*#_ftn\d+\))\\\[\d+\\\]')
+body_lines = [_STRAY_FN_RE.sub(r'\1', ln) for ln in body_lines]
 
 fnref_counter = {}
 
@@ -147,6 +174,8 @@ for l in fn_lines:
         num = int(m.group(1))
         footnotes.append({'n':num,'html':conv_inline(m.group(2), in_footnote=True)})
 
+_LANGS = [('en','English'),('it','Italiano'),('es','Español'),('fr','Français'),
+          ('de','Deutsch'),('pt','Português'),('pl','Polski'),('ar','العربية')]
 meta = {
   'title':'Magnifica Humanitas',
   'kind':'Encyclical Letter',
@@ -156,10 +185,16 @@ meta = {
   'place':'Rome, at Saint Peter’s',
   'source':'https://www.vatican.va/content/leo-xiv/en/encyclicals/documents/20260515-magnifica-humanitas.html',
   'multimedia':'https://www.vatican.va/content/leo-xiv/en/events/event.dir.html/content/vaticanevents/en/2026/5/25/enciclica-magnifica-humanitas.html',
+  'descriptor':'First Encyclical Letter of His Holiness Pope Leo XIV',
+  'video':'https://www.youtube.com/watch?v=7WJuHd8EtPQ',
+  'languages':[{'code':c,'label':l,
+    'url':f'https://www.vatican.va/content/leo-xiv/{c}/encyclicals/documents/20260515-magnifica-humanitas.html'}
+    for c,l in _LANGS],
 }
 
 out = {'meta':meta,'nodes':nodes,'footnotes':footnotes}
-json.dump(out, open('/tmp/magnifica.json','w'), ensure_ascii=False, indent=1)
+json.dump(out, open(OUT,'w'), ensure_ascii=False, indent=1)
+print('wrote', OUT)
 
 paras = [x for x in nodes if x['type']=='para']
 nums = [x['n'] for x in paras if x['n']]
