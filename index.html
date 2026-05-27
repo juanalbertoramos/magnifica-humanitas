@@ -115,9 +115,12 @@ main{max-width:var(--measure);margin:0 auto;padding:0 22px 28vh}
 .cover .kicker{font-family:var(--ui);font-size:11.5px;letter-spacing:.36em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:18px}
 .cover .pope{font-family:var(--script);font-size:clamp(21px,4.6vw,32px);font-weight:500;color:var(--ink-soft);font-style:italic;margin-bottom:10px;letter-spacing:.02em}
 .cover h1{font-family:var(--title);font-weight:700;letter-spacing:.02em;line-height:1.0;
-  font-size:clamp(46px,11vw,98px);margin:6px 0 4px;
+  font-size:clamp(40px,9.5vw,92px);margin:6px 0 4px;
   background:var(--grad-gold);-webkit-background-clip:text;background-clip:text;color:transparent;
-  filter:drop-shadow(0 2px 1px color-mix(in srgb,var(--gold-deep) 22%,transparent))}
+  filter:drop-shadow(0 2px 1px color-mix(in srgb,var(--gold-deep) 22%,transparent));
+  /* break out of the reading column so 'MAGNIFICA' / 'HUMANITAS' (9 wide Cinzel Decorative chars each) aren't clipped */
+  margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
+  padding-left:22px;padding-right:22px}
 html[data-theme="night"] .cover h1{filter:drop-shadow(0 1px 10px color-mix(in srgb,var(--gold) 30%,transparent))}
 .cover .sub{font-family:var(--script);font-size:clamp(19px,3.6vw,27px);font-style:italic;color:var(--accent);max-width:30ch;margin:16px auto 0;line-height:1.32;font-weight:500}
 .rule-orn{display:flex;align-items:center;justify-content:center;gap:14px;margin:34px 0 30px;color:var(--gold)}
