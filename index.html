@@ -1031,7 +1031,7 @@ function buildTOC(){
 }
 
 /* ---------- scrollspy + progress + resume ---------- */
-const doc=$('#doc');let curPara=1;
+const doc=$('#doc');let curPara=1,_highMark=store.get('last',0);
 function onScroll(){
   const st=window.scrollY,h=document.documentElement.scrollHeight-window.innerHeight;
   const pct=Math.min(100,Math.max(0,st/h*100));
@@ -1041,9 +1041,11 @@ function onScroll(){
   const mid=window.innerHeight*0.32;let cur=null,curC=null,curS=null;
   for(const p of paraEls){const r=p.getBoundingClientRect();if(r.top<=mid)cur=p;else break;}
   if(cur){curPara=+cur.dataset.n}
-  // NOTE: 'last' is persisted on pagehide / visibilitychange:hidden (see below).
-  // Stamping on every scroll tick erased the resume position when the user
-  // scrolled back up to the cover.
+  // Persist as a monotonic high-water mark: only advance, never decrease.
+  // Walking back up to the cover therefore can't clobber the furthest point
+  // reached this session, and the persist doesn't rely on pagehide /
+  // visibilitychange firing reliably (Chrome bfcache and iOS Safari skip them).
+  if(curPara>_highMark&&curPara>1){_highMark=curPara;store.set('last',curPara)}
   // active chapter/section
   let ac=null,as=null;
   for(const c of chapters){if(c.el.getBoundingClientRect().top<=mid)ac=c.id}
@@ -1055,9 +1057,10 @@ let paraEls=[];
 let ticking=false;
 window.addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(()=>{onScroll();ticking=false});ticking=true}},{passive:true});
 
-// Persist the resume position when the user actually leaves the tab — not on
-// every scroll tick (that erased it when scrolling back to the cover).
-function persistLast(){if(curPara>1)store.set('last',curPara)}
+// Belt-and-suspenders backup to the high-water-mark write inside onScroll:
+// if the user has somehow advanced curPara without an onScroll tick firing,
+// catch it on tab-exit. Still monotonic — never downgrade the stored value.
+function persistLast(){if(curPara>_highMark&&curPara>1){_highMark=curPara;store.set('last',curPara)}}
 window.addEventListener('pagehide',persistLast);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')persistLast()});
 $('#topBtn').onclick=()=>{
@@ -1448,6 +1451,7 @@ if(last>1){
   restart.style.display='inline-block';
   restart.onclick=()=>{
     store.set('last',0);
+    _highMark=0;   // reset the session high-water too, or onScroll won't write again until past prior peak
     rb.style.display='none';restart.style.display='none';
     $('#toast').classList.remove('show');   // dismiss the welcome-back toast if still up
     window.scrollTo({top:0,behavior:'smooth'});
