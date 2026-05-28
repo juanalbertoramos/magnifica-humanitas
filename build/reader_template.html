@@ -124,6 +124,11 @@ header{position:fixed;top:0;left:0;right:0;z-index:150;
 .brand .bt{font-size:16px;font-weight:600;letter-spacing:.06em;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase;font-family:var(--display)}
 .brand .bs{font-family:var(--ui);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
 .hspace{flex:1}
+.langswitch{display:inline-flex;border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);border-radius:30px;overflow:hidden;margin-right:10px;background:color-mix(in srgb,var(--paper) 60%,transparent)}
+.langswitch button{font-family:var(--ui);font-size:11px;font-weight:600;letter-spacing:.08em;padding:6px 10px;background:transparent;border:none;color:var(--ink-soft);cursor:pointer;transition:all .15s;min-width:34px}
+.langswitch button:hover{color:var(--ink);background:color-mix(in srgb,var(--gold) 14%,transparent)}
+.langswitch button.on{background:var(--grad-gold);color:#3a2c08}
+@media(max-width:480px){.langswitch button{padding:6px 7px;min-width:30px;font-size:10px}}
 .htools{display:flex;align-items:center;gap:4px}
 .iconbtn{width:38px;height:38px;border-radius:9px;border:1px solid transparent;background:transparent;color:var(--ink-soft);
   cursor:pointer;display:grid;place-items:center;font-family:var(--ui);transition:all .16s;position:relative}
@@ -506,6 +511,11 @@ sup.fnref a:hover{text-decoration:underline}
    </div>
   </div>
   <div class="hspace"></div>
+  <div class="langswitch" id="langswitch" role="group" aria-label="Language">
+   <button type="button" data-lang="en" aria-label="English">EN</button>
+   <button type="button" data-lang="fr" aria-label="Français">FR</button>
+   <button type="button" data-lang="es" aria-label="Español">ES</button>
+  </div>
   <div class="htools">
    <button class="iconbtn" id="btnToc" aria-label="Table of contents" data-tip="Contents"><svg aria-hidden="true" viewBox="0 0 24 24"><line x1="8" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="20" y2="12"/><line x1="8" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg></button>
    <button class="iconbtn" id="btnSearch" aria-label="Search the text" data-tip="Search"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
@@ -519,7 +529,7 @@ sup.fnref a:hover{text-decoration:underline}
 <div id="searchbar">
  <div class="sbin">
    <svg viewBox="0 0 24 24" width="18" height="18" style="stroke:var(--ink-soft);fill:none;stroke-width:1.7"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-   <input id="searchInput" placeholder="Search the encyclical…" autocomplete="off">
+   <input id="searchInput" data-i18n-ph="search_ph" placeholder="Search the encyclical…" autocomplete="off">
    <span class="scount" id="scount"></span>
    <div class="snav"><button id="sPrev" title="Previous">&#8249;</button><button id="sNext" title="Next">&#8250;</button></div>
    <button class="sclose" id="sClose">&times;</button>
@@ -530,28 +540,28 @@ sup.fnref a:hover{text-decoration:underline}
 
 <!-- TOC -->
 <aside class="panel left" id="tocPanel">
- <div class="phead"><h2>Contents</h2><button class="x" data-close>&times;</button></div>
+ <div class="phead"><h2 data-i18n="contents">Contents</h2><button class="x" data-close>&times;</button></div>
  <div class="pbody">
-   <div class="toc-prog">Reading progress · <span id="tocPct">0%</span><div class="barwrap"><div class="bar" id="tocBar"></div></div></div>
+   <div class="toc-prog"><span data-i18n="tocprogress">Reading progress</span> · <span id="tocPct">0%</span><div class="barwrap"><div class="bar" id="tocBar"></div></div></div>
    <nav id="tocNav"></nav>
  </div>
 </aside>
 
 <!-- NOTES -->
 <aside class="panel right" id="notesPanel">
- <div class="phead"><h2>My Study</h2><button class="x" data-close>&times;</button></div>
+ <div class="phead"><h2 data-i18n="mystudy">My Study</h2><button class="x" data-close>&times;</button></div>
  <div class="pbody">
    <div class="notes-actions">
-     <button class="btn ghost" id="expMd">Export Markdown</button>
-     <button class="btn ghost" id="expJson">Backup JSON</button>
-     <button class="btn ghost" id="impBtn">Import</button>
+     <button class="btn ghost" id="expMd" data-i18n="export_md">Export Markdown</button>
+     <button class="btn ghost" id="expJson" data-i18n="backup_json">Backup JSON</button>
+     <button class="btn ghost" id="impBtn" data-i18n="import">Import</button>
      <input type="file" id="impFile" accept="application/json" hidden>
    </div>
    <div class="tabs">
-     <button class="tab on" data-tab="all">All</button>
-     <button class="tab" data-tab="hl">Highlights</button>
-     <button class="tab" data-tab="note">Notes</button>
-     <button class="tab" data-tab="bm">Bookmarks</button>
+     <button class="tab on" data-tab="all" data-i18n="all">All</button>
+     <button class="tab" data-tab="hl" data-i18n="highlights">Highlights</button>
+     <button class="tab" data-tab="note" data-i18n="notes">Notes</button>
+     <button class="tab" data-tab="bm" data-i18n="bookmarks">Bookmarks</button>
    </div>
    <div id="notesList"></div>
  </div>
@@ -559,20 +569,20 @@ sup.fnref a:hover{text-decoration:underline}
 
 <!-- SETTINGS -->
 <aside class="panel right" id="setPanel">
- <div class="phead"><h2>Reading</h2><button class="x" data-close>&times;</button></div>
+ <div class="phead"><h2 data-i18n="reading">Reading</h2><button class="x" data-close>&times;</button></div>
  <div class="pbody">
-   <div class="set-group"><h3>Theme</h3><div class="seg" id="segTheme">
-     <button data-theme="ivory">Ivory</button><button data-theme="sepia">Sepia</button><button data-theme="night">Night</button></div></div>
-   <div class="set-group"><h3>Typeface</h3><div class="seg" id="segFont">
-     <button data-font="serif">Serif</button><button data-font="sans">Sans</button></div></div>
-   <div class="set-group"><h3>Text size</h3><div class="seg" id="segSize">
-     <button data-size="dn">A&minus;</button><button data-size="rst">Reset</button><button data-size="up">A&plus;</button></div></div>
-   <div class="set-group"><h3>Line spacing</h3><div class="seg" id="segLh">
-     <button data-lh="1.55">Snug</button><button data-lh="1.78">Normal</button><button data-lh="2.05">Airy</button></div></div>
-   <div class="set-group"><div class="sw"><label>Justify text</label><div class="toggle" id="tgJustify"></div></div>
-     <div class="sw"><label>Width: comfortable column</label><div class="toggle on" id="tgWidth"></div></div></div>
-   <div class="set-group"><h3>About</h3>
-     <p class="note-mini" style="border:none;padding:0">Your highlights, notes &amp; bookmarks are saved privately in this browser (localStorage). Use <b>Backup JSON</b> to keep them safe or move them to another device. This page works fully offline.</p>
+   <div class="set-group"><h3 data-i18n="theme">Theme</h3><div class="seg" id="segTheme">
+     <button data-theme="ivory" data-i18n="ivory">Ivory</button><button data-theme="sepia" data-i18n="sepia">Sepia</button><button data-theme="night" data-i18n="night">Night</button></div></div>
+   <div class="set-group"><h3 data-i18n="typeface">Typeface</h3><div class="seg" id="segFont">
+     <button data-font="serif" data-i18n="serif">Serif</button><button data-font="sans" data-i18n="sans">Sans</button></div></div>
+   <div class="set-group"><h3 data-i18n="text_size">Text size</h3><div class="seg" id="segSize">
+     <button data-size="dn">A&minus;</button><button data-size="rst" data-i18n="size_reset">Reset</button><button data-size="up">A&plus;</button></div></div>
+   <div class="set-group"><h3 data-i18n="line_spacing">Line spacing</h3><div class="seg" id="segLh">
+     <button data-lh="1.55" data-i18n="snug">Snug</button><button data-lh="1.78" data-i18n="normal">Normal</button><button data-lh="2.05" data-i18n="airy">Airy</button></div></div>
+   <div class="set-group"><div class="sw"><label data-i18n="justify">Justify text</label><div class="toggle" id="tgJustify"></div></div>
+     <div class="sw"><label data-i18n="width">Width: comfortable column</label><div class="toggle on" id="tgWidth"></div></div></div>
+   <div class="set-group"><h3 data-i18n="about">About</h3>
+     <p class="note-mini" id="aboutCopy" data-i18n-html="about_copy" style="border:none;padding:0">Your highlights, notes &amp; bookmarks are saved privately in this browser (localStorage). Use <b>Backup JSON</b> to keep them safe or move them to another device. This page works fully offline.</p>
    </div>
  </div>
 </aside>
@@ -584,8 +594,8 @@ sup.fnref a:hover{text-decoration:underline}
  <div class="hc" data-hl="sky" style="background:var(--hl-sky)"></div>
  <div class="hc" data-hl="mint" style="background:var(--hl-mint)"></div>
  <div class="tdiv"></div>
- <button class="ti" id="stNote"><svg viewBox="0 0 24 24"><path d="M4 4h12l4 4v12H4z"/><path d="M8 12h8M8 16h5"/></svg>Note</button>
- <button class="ti" id="stCopy"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copy</button>
+ <button class="ti" id="stNote"><svg viewBox="0 0 24 24"><path d="M4 4h12l4 4v12H4z"/><path d="M8 12h8M8 16h5"/></svg><span data-i18n="note">Note</span></button>
+ <button class="ti" id="stCopy"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span data-i18n="copy">Copy</span></button>
 </div>
 
 <!-- footnote popover -->
@@ -615,11 +625,11 @@ sup.fnref a:hover{text-decoration:underline}
    <h3>Note</h3>
    <div class="mref" id="mRef"></div>
    <div class="mq" id="mQuote" style="display:none"></div>
-   <textarea id="mText" placeholder="Write your reflection, question, or cross-reference…"></textarea>
+   <textarea id="mText" data-i18n-ph="note_ph" placeholder="Write your reflection, question, or cross-reference…"></textarea>
    <div class="mfoot">
-     <button class="btn ghost" id="mDelete" style="margin-right:auto;display:none">Delete</button>
-     <button class="btn ghost" id="mCancel">Cancel</button>
-     <button class="btn" id="mSave">Save note</button>
+     <button class="btn ghost" id="mDelete" data-i18n="delete" style="margin-right:auto;display:none">Delete</button>
+     <button class="btn ghost" id="mCancel" data-i18n="cancel">Cancel</button>
+     <button class="btn" id="mSave" data-i18n="save">Save note</button>
    </div>
  </div>
 </div>
@@ -655,7 +665,11 @@ sup.fnref a:hover{text-decoration:underline}
 // restored-scroll event can fire onScroll before render() populates paraEls,
 // leaving curPara stuck and breaking the resume persistence. (Codex finding.)
 if('scrollRestoration' in history) history.scrollRestoration='manual';
-const DOC = JSON.parse(document.getElementById('docdata').textContent);
+// Multilang: DOCS = {en:..., fr:..., es:...}. DOC is the active language's data.
+// All existing code keeps reading `DOC.meta.*`, `DOC.nodes`, `DOC.footnotes`; only
+// the *source* changes when the user switches language.
+const DOCS = JSON.parse(document.getElementById('docdata').textContent);
+const LANGS = Object.keys(DOCS);
 const NS='mh2026:';
 const $=(s,r=document)=>r.querySelector(s);
 const $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -663,6 +677,36 @@ const store={
   get(k,d){try{const v=localStorage.getItem(NS+k);return v==null?d:JSON.parse(v)}catch(e){return d}},
   set(k,v){try{localStorage.setItem(NS+k,JSON.stringify(v))}catch(e){}}
 };
+
+// One-time migration from the pre-multilang `annos` shape into split keys.
+// Bookmarks + paragraph notes go global; legacy highlights are assumed English
+// (the only language the reader had before multilang). Idempotent: guarded by
+// the `_migrated_v2` flag AND defensive against re-runs that find split keys
+// already populated — only fills missing keys, never clobbers existing data.
+(function migrate(){
+  if (store.get('_migrated_v2', false)) return;
+  const old = store.get('annos', null);
+  if (old && typeof old === 'object'){
+    const fillIfMissing = (key, src) => {
+      if (store.get(key, null) == null) store.set(key, Array.isArray(src) ? src : []);
+    };
+    fillIfMissing('bookmarks', old.bookmarks);
+    fillIfMissing('notes',     old.notes);
+    fillIfMissing('hl.en',     old.highlights);
+  }
+  store.set('_migrated_v2', true);
+})();
+
+function pickInitialLang(){
+  // Read from ?lang=xx query param (preferred, doesn't collide with #pN anchors).
+  const q = new URLSearchParams(location.search).get('lang');
+  if (q && DOCS[q.toLowerCase()]) return q.toLowerCase();
+  const saved = store.get('lang', null);
+  if (saved && DOCS[saved]) return saved;
+  return 'en';   // explicit default — don't surprise existing visitors
+}
+let lang = pickInitialLang();
+let DOC = DOCS[lang];
 
 /* ---------- annotations model ---------- */
 // Strict shape validation. Runs on every localStorage load and every JSON
@@ -692,8 +736,21 @@ function sanitizeAnnos(raw){
   if(Array.isArray(raw.bookmarks))out.bookmarks=raw.bookmarks.filter(isPara);
   return out;
 }
-let A=sanitizeAnnos(store.get('annos',null));
-const saveA=()=>store.set('annos',A);
+// bookmarks + notes are GLOBAL (paragraph N is the same idea in any language).
+// highlights are PER-LANGUAGE (text offsets don't survive translation), keyed
+// by mh2026:hl.<lang>. sanitizeAnnos still validates every shape.
+function loadA(){
+  return sanitizeAnnos({
+    bookmarks:  store.get('bookmarks', []),
+    notes:      store.get('notes', []),
+    highlights: store.get('hl.'+lang, []),
+  });
+}
+let A = loadA();
+const saveBookmarks  = ()=>store.set('bookmarks', A.bookmarks);
+const saveNotes      = ()=>store.set('notes', A.notes);
+const saveHighlights = ()=>store.set('hl.'+lang, A.highlights);
+const saveA = ()=>{saveBookmarks(); saveNotes(); saveHighlights();};
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 
 /* ---------- render document ---------- */
@@ -702,7 +759,7 @@ const sections=[]; // {id,title,level,chapterIdx}
 function render(){
   const doc=$('#doc');
   // cover
-  const m=DOC.meta;
+  const m=DOC.meta, ui=DOC.meta.ui||{};
   const wc=DOC.nodes.reduce((s,n)=>s+(n.html?n.html.replace(/<[^>]+>/g,'').split(/\s+/).length:0),0);
   const mins=Math.round(wc/220);
   const paraCount=DOC.nodes.filter(n=>n.type==='para').length;
@@ -716,20 +773,20 @@ function render(){
     <div class="sub">${m.subtitle}</div>
     <div class="rule-orn"><span class="ln"></span><svg><use href="#sym-orn"/></svg><span class="ln r"></span></div>
     <div class="stats">
-      <div class="stat"><b>${paraCount}</b><span>Paragraphs</span></div>
-      <div class="stat"><b>${DOC.footnotes.length}</b><span>Footnotes</span></div>
-      <div class="stat"><b>~${mins}</b><span>Min read</span></div>
-      <div class="stat"><b>${chaptersExpected()}</b><span>Movements</span></div>
+      <div class="stat"><b>${paraCount}</b><span>${ui.paragraphs||'Paragraphs'}</span></div>
+      <div class="stat"><b>${DOC.footnotes.length}</b><span>${ui.footnotes||'Footnotes'}</span></div>
+      <div class="stat"><b>~${mins}</b><span>${ui.min_read||'Min read'}</span></div>
+      <div class="stat"><b>${chaptersExpected()}</b><span>${ui.movements||'Movements'}</span></div>
     </div>
-    <div class="meta">Given at ${m.place} · ${m.date}</div>
+    <div class="meta">${ui.given_at||'Given at'} ${m.place} · ${m.date}</div>
     <div class="cover-actions">
-      <button class="btn" id="beginBtn"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg> Begin reading</button>
+      <button class="btn" id="beginBtn"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg> ${ui.begin||'Begin reading'}</button>
       <button class="btn ghost" id="resumeBtn" style="display:none"></button>
-      <a class="btn ghost" href="magnifica-humanitas.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><path d="M9 13h6M9 17h6"/></svg> Official PDF</a>
-      <a class="btn ghost" href="${m.video}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20 6 4"/></svg> Watch the signing</a>
+      <a class="btn ghost" href="magnifica-humanitas.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><path d="M9 13h6M9 17h6"/></svg> ${ui.pdf||'Official PDF'}</a>
+      <a class="btn ghost" href="${m.video}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20 6 4"/></svg> ${ui.video||'Watch the signing'}</a>
     </div>
-    <button class="restart-link" id="restartBtn" style="display:none">Begin again from the first paragraph</button>
-    <div class="langrow">Read the official text · ${langs}</div>
+    <button class="restart-link" id="restartBtn" data-i18n="restart_link" style="display:none">Begin again from the first paragraph</button>
+    <div class="langrow">${ui.official_text||'Read the official text'} · ${langs}</div>
     <div class="scrolltip">scroll &#8595;</div>`;
   doc.appendChild(cover);
 
@@ -866,7 +923,7 @@ $$('#seltool .hc').forEach(c=>c.addEventListener('mousedown',e=>{
   const h={id:uid(),paraN:curSel.paraN,start:curSel.start,end:curSel.end,color:c.dataset.hl,text:curSel.text,note:''};
   A.highlights.push(h);saveA();applyHighlight(h);refreshNotes();window.getSelection().removeAllRanges();hideSelTool();
 }));
-$('#stCopy').addEventListener('mousedown',e=>{e.preventDefault();if(curSel)navigator.clipboard&&navigator.clipboard.writeText(curSel.text);toast('Copied to clipboard');hideSelTool()});
+$('#stCopy').addEventListener('mousedown',e=>{e.preventDefault();if(curSel)navigator.clipboard&&navigator.clipboard.writeText(curSel.text);toast(DOC.meta.ui.copied||'Copied to clipboard');hideSelTool()});
 $('#stNote').addEventListener('mousedown',e=>{
   e.preventDefault();if(!curSel)return;
   const h={id:uid(),paraN:curSel.paraN,start:curSel.start,end:curSel.end,color:'gold',text:curSel.text,note:''};
@@ -890,14 +947,14 @@ function paraMenu(n,anchor){
   const isBm=A.bookmarks.includes(n);
   if(isBm)A.bookmarks=A.bookmarks.filter(x=>x!==n);else A.bookmarks.push(n);
   saveA();refreshIndicators();refreshNotes();
-  toast(isBm?('Removed bookmark ¶'+n):('Bookmarked ¶'+n),'Add note',()=>openNote({type:'para',paraN:n}));
+  toast(isBm?((DOC.meta.ui.removed_bm||'Removed bookmark ¶')+n):((DOC.meta.ui.bookmarked||'Bookmarked ¶')+n),DOC.meta.ui.add_note||'Add note',()=>openNote({type:'para',paraN:n}));
 }
 
 /* ---------- footnote popover ---------- */
 const fnpop=$('#fnpop');
 function showFnPop(num,anchor){
   const f=DOC.footnotes.find(x=>+x.n===+num);if(!f)return;
-  fnpop.innerHTML=`<div class="fnp-h"><span>Note ${num}</span><span><a href="#fn-${num}" id="fnGoto">full list &#8595;</a> &nbsp; <span class="x" id="fnClose">&times;</span></span></div><div>${f.html}</div>`;
+  fnpop.innerHTML=`<div class="fnp-h"><span>${DOC.meta.ui.note||'Note'} ${num}</span><span><a href="#fn-${num}" id="fnGoto">${DOC.meta.ui.fn_full_list||'full list &#8595;'}</a> &nbsp; <span class="x" id="fnClose">&times;</span></span></div><div>${f.html}</div>`;
   fnpop.classList.add('show');
   const rect=anchor.getBoundingClientRect();
   const pw=fnpop.offsetWidth;
@@ -930,7 +987,7 @@ $('#mSave').onclick=()=>{
     if(noteCtx.id){const nt=A.notes.find(x=>x.id===noteCtx.id);if(nt)nt.text=txt}
     else if(txt){A.notes.push({id:uid(),paraN:noteCtx.paraN,text:txt,created:Date.now()})}
   }
-  saveA();refreshIndicators();refreshNotes();closeNote();toast('Saved');
+  saveA();refreshIndicators();refreshNotes();closeNote();toast(DOC.meta.ui.saved||'Saved');
 };
 $('#mDelete').onclick=()=>{
   if(noteCtx.type==='hl'){const h=A.highlights.find(x=>x.id===noteCtx.id);if(h)h.note='';$$('mark[data-hid="'+noteCtx.id+'"]').forEach(m=>m.classList.remove('has-note'))}
@@ -955,7 +1012,15 @@ function refreshNotes(){
   if(curTab==='hl')items=items.filter(i=>i.kind==='hl');
   if(curTab==='note')items=items.filter(i=>i.kind==='note'||(i.kind==='hl'&&i.text));
   if(curTab==='bm')items=items.filter(i=>i.kind==='bm');
-  if(!items.length){list.innerHTML=`<div class="empty"><span class="big">&#9998;</span>No ${curTab==='all'?'annotations':curTab==='bm'?'bookmarks':curTab+'s'} yet.<br>Select any text to highlight, click a ¶ number to bookmark, and build your study notes here.</div>`;return}
+  if(!items.length){
+    const ui=DOC.meta.ui||{};
+    const kindKey = curTab==='all' ? 'all' : curTab==='bm' ? 'bookmarks' : curTab==='hl' ? 'highlights' : 'notes';
+    const kindLabel = (ui[kindKey]||kindKey).toLowerCase();
+    const emptyMsg = (ui.no_anno||'No {kind} yet.').replace('{kind}', kindLabel);
+    const hint = ui.select_hint || 'Select any text to highlight, click a ¶ number to bookmark, and build your study notes here.';
+    list.innerHTML=`<div class="empty"><span class="big">&#9998;</span>${emptyMsg}<br>${hint}</div>`;
+    return;
+  }
   list.innerHTML=items.map(i=>{
     const ref=`¶${i.paraN} · ${chapterTitleForPara(i.paraN)}`;
     const icon=i.kind==='bm'?'&#9873;':i.kind==='hl'?'&#9678;':'&#9998;';
@@ -1043,8 +1108,11 @@ function buildTOC(){
     const secs=c.secs.map(s=>`<a class="toc-sec lvl${s.level}" href="#${s.id}" data-sec="${s.id}">${s.title}</a>`).join('');
     return `<div class="toc-ch"><a href="#${c.id}" data-ch="${c.id}"><span class="cl">${c.label}</span>${c.title}</a>${secs}</div>`;
   }).join('');
-  nav.addEventListener('click',e=>{const a=e.target.closest('a');if(a){closePanels()}});
 }
+// Delegated TOC click handler — attached once at script init. #tocNav itself
+// is a stable DOM node (in the static panel markup), so we don't need to
+// re-bind on language switch the way the cover controls do.
+$('#tocNav').addEventListener('click',e=>{const a=e.target.closest('a');if(a){closePanels()}});
 
 /* ---------- scrollspy + progress + resume ---------- */
 const doc=$('#doc');let curPara=1,_highMark=store.get('last',0),_inText=false;
@@ -1436,6 +1504,79 @@ document.addEventListener('keydown',e=>{
   if(e.key==='k'||e.key==='ArrowUp'){const pv=$('#p'+(curPara-1));if(pv){e.preventDefault();pv.scrollIntoView({behavior:'smooth',block:'center'})}}
 });
 
+/* ---------- multilang UI ---------- */
+// Walks every [data-i18n] / [data-i18n-ph] element and updates its text /
+// placeholder from DOC.meta.ui. Also updates the header icon button tooltips
+// (data-tip + aria-label), the active language chip, and hides the Listen
+// button in non-EN languages (no FR/ES audio narration shipped).
+function localizeUI(){
+  const ui = DOC.meta.ui || {};
+  $$('#langswitch button').forEach(b=>b.classList.toggle('on', b.dataset.lang===lang));
+  $$('[data-i18n]').forEach(el=>{ const k=el.dataset.i18n; if(ui[k]) el.textContent = ui[k]; });
+  $$('[data-i18n-ph]').forEach(el=>{ const k=el.dataset.i18nPh; if(ui[k]) el.placeholder = ui[k]; });
+  $$('[data-i18n-html]').forEach(el=>{ const k=el.dataset.i18nHtml; if(ui[k]) el.innerHTML = ui[k]; });
+  // header icon button hints
+  const setTip=(id,key,fallback)=>{const b=$('#'+id);if(!b)return;const v=ui[key]||fallback;b.setAttribute('aria-label',v);b.dataset.tip=v};
+  setTip('btnToc',    'contents', 'Contents');
+  setTip('btnSearch', 'search_ph', 'Search');
+  setTip('btnListen', 'readaloud', 'Listen');
+  setTip('btnNotes',  'mystudy', 'My study');
+  setTip('btnSet',    'reading', 'Settings');
+  // The audiobook is English-only — hide the Listen button entirely in FR/ES.
+  $('#btnListen').style.display = (lang==='en') ? '' : 'none';
+  document.documentElement.lang = lang;
+}
+
+function setLang(newLang){
+  if (!DOCS[newLang] || newLang===lang) return;
+  // Leaving English: stop whatever's playing (narration MP3 *or* Web Speech) and
+  // close the listen bar. No FR/ES narration exists. Player.stop() handles both
+  // engines — without this, Web Speech would keep reading English over FR/ES.
+  if (lang==='en' && newLang!=='en') {
+    if (typeof Player !== 'undefined') {
+      try { Player.stop(); } catch(e){}
+    }
+    if (typeof listen !== 'undefined') {
+      listen.classList.remove('open');
+      $('#listenCfg').classList.remove('show');
+      $('#btnListen').classList.remove('on');
+    }
+  }
+  // Close the search bar — its hits[] points at DOM nodes that are about to be
+  // detached, and the query is per-language anyway.
+  if (typeof closeSearch === 'function') closeSearch();
+  saveHighlights();                                    // persist current lang highlights
+  lang = newLang; DOC = DOCS[lang]; store.set('lang', lang);
+  // Reflect language in the URL via ?lang=xx so shareable links work; keep the
+  // hash untouched so #pN paragraph anchors are unaffected.
+  const sp = new URLSearchParams(location.search);
+  sp.set('lang', lang);
+  history.replaceState(null,'', location.pathname + '?' + sp.toString() + location.hash);
+  // load the new language's highlights — through sanitizeAnnos so a malformed
+  // localStorage payload can't crash renderAllHighlights downstream.
+  A.highlights = sanitizeAnnos({highlights: store.get('hl.'+lang, [])}).highlights;
+  // remember where the reader was so we can restore after re-render
+  const restoreToPara = curPara > 1 ? curPara : 0;
+  // re-render the document with the new language
+  $('#doc').innerHTML = '';
+  chapters.length = 0; sections.length = 0;
+  render();
+  paraEls = $$('.para');
+  buildTOC();
+  renderAllHighlights();
+  refreshIndicators();
+  refreshNotes();
+  localizeUI();
+  loadPortrait();          // cover was rebuilt → reload the photo
+  bindCoverControls();     // Begin / Begin-again click handlers re-attach
+  updateResumeUI(_highMark);  // re-binds Resume button onclick to the (new) DOM node
+  if (restoreToPara) {
+    const t = $('#p'+restoreToPara);
+    if (t) t.scrollIntoView({behavior:'instant', block:'center'});
+  }
+  onScroll();
+}
+
 /* ---------- boot ---------- */
 render();
 paraEls=$$('.para');
@@ -1445,10 +1586,12 @@ renderAllHighlights();
 refreshIndicators();
 refreshNotes();
 onScroll();
-$('#beginBtn').onclick=()=>{const f=chapters[0];if(f)f.el.scrollIntoView({behavior:'smooth'})};
+localizeUI();
+$$('#langswitch button').forEach(b => b.onclick = () => setLang(b.dataset.lang));
 // Cover portrait: prefer a local drop-in (images/leo-xiv.jpg, works offline),
 // else the official vatican.va portrait (when online), else the gold emblem.
-(function loadPortrait(){
+// Callable from setLang() because re-rendering the cover wipes the <img>.
+function loadPortrait(){
   const pin=$('#coverPortrait');if(!pin)return;
   const sources=['images/leo-xiv.jpg',
     'https://www.vatican.va/etc/designs/vatican/library/clientlibs/themes/vatican-v2/images/leo-xiv.png'];
@@ -1461,36 +1604,51 @@ $('#beginBtn').onclick=()=>{const f=chapters[0];if(f)f.el.scrollIntoView({behavi
     img.src=sources[i];
   };
   tryNext();
-})();
+}
+loadPortrait();
 // Resume UI — kept in sync with the live high-water mark, not just the
 // boot-time stored value. onScroll calls updateResumeUI(curPara) whenever
 // it advances the mark, so a user who scrolls in and then comes back to
 // the cover within the same session sees the updated paragraph number
 // without having to refresh.
-const _resumeBtn=$('#resumeBtn'),_restartBtn=$('#restartBtn');
+// Look up #resumeBtn / #restartBtn fresh every call — setLang() rebuilds #doc
+// so any cached reference goes stale after a language switch.
 function updateResumeUI(n){
+  const rb=$('#resumeBtn'), rt=$('#restartBtn');
+  if(!rb||!rt)return;
   if(n>=1){
-    _resumeBtn.style.display='inline-flex';
-    _resumeBtn.innerHTML='Resume at ¶'+n;
-    _resumeBtn.onclick=()=>goPara(n);
-    _restartBtn.style.display='inline-block';
+    rb.style.display='inline-flex';
+    rb.innerHTML=(DOC.meta.ui.resume||'Resume at ¶')+n;
+    rb.onclick=()=>goPara(n);
+    rt.style.display='inline-block';
   }else{
-    _resumeBtn.style.display='none';
-    _restartBtn.style.display='none';
+    rb.style.display='none';
+    rt.style.display='none';
   }
 }
-_restartBtn.onclick=()=>{
-  store.set('last',0);
-  _highMark=0;
-  _inText=false;
-  updateResumeUI(0);
-  $('#toast').classList.remove('show');
-  window.scrollTo({top:0,behavior:'smooth'});
-  toast('Reading position cleared — start whenever you like.');
-};
+// Cover-control bindings — must be re-attached after every render() because
+// render() rebuilds #doc and its children (Begin / Resume / Begin-again).
+function bindCoverControls(){
+  const beginBtn=$('#beginBtn');
+  if(beginBtn) beginBtn.onclick=()=>{const f=chapters[0];if(f)f.el.scrollIntoView({behavior:'smooth'})};
+  const restartBtn=$('#restartBtn');
+  if(restartBtn) restartBtn.onclick=()=>{
+    store.set('last',0);
+    _highMark=0;
+    _inText=false;
+    updateResumeUI(0);
+    $('#toast').classList.remove('show');
+    // Instant scroll so no in-flight onScroll ticks during a smooth transition
+    // can write a new high-water mark before the user reaches the cover.
+    try{window.scrollTo({top:0,left:0,behavior:'instant'})}
+    catch(e){document.documentElement.scrollTop=0;document.body.scrollTop=0}
+    toast(DOC.meta.ui.cleared||'Reading position cleared — start whenever you like.');
+  };
+}
+bindCoverControls();
 if(_highMark>=1){
   updateResumeUI(_highMark);
-  setTimeout(()=>toast('Welcome back — continue at ¶'+_highMark,'Resume',()=>goPara(_highMark)),700);
+  setTimeout(()=>toast((DOC.meta.ui.welcome_back||'Welcome back — continue at ¶')+_highMark,DOC.meta.ui.resume_btn||'Resume',()=>goPara(_highMark)),700);
 }
 </script>
 </body>
