@@ -5,6 +5,8 @@ encyclical, *Magnifica Humanitas* (15 May 2026, "On Safeguarding the
 Human Person in the Time of Artificial Intelligence").
 
 **Read it:** <https://juanalbertoramos.github.io/magnifica-humanitas/>
+&nbsp;·&nbsp; [Français](https://juanalbertoramos.github.io/magnifica-humanitas/?lang=fr)
+&nbsp;·&nbsp; [Español](https://juanalbertoramos.github.io/magnifica-humanitas/?lang=es)
 
 The reader is one HTML file. Open it in a browser, or download it and
 double-click to read fully offline. No server, no build step, no
@@ -12,7 +14,10 @@ network dependency once loaded.
 
 ## Features
 
-- The complete official English text (245 paragraphs, 224 footnotes) embedded.
+- The complete official text in **English, French and Spanish** (each
+  245 paragraphs, 224 footnotes) embedded — switch languages from the
+  EN/FR/ES chip group in the header; the choice persists across
+  visits.
 - Three themes — ivory (white-and-gold), sepia, night.
 - Footnote popovers, full-text search, scrollspy table of contents,
   resume-where-you-left-off.
@@ -22,7 +27,8 @@ network dependency once loaded.
 - Read-aloud via a 4-hour narration (`audio/magnifica-narration.mp3`,
   bm_george voice, embedded chapter markers). The reader auto-detects
   the file and falls back to the browser's built-in voices if it's not
-  present.
+  present. Narration is English-only; the Listen control hides
+  automatically when reading in French or Spanish.
 - Keyboard navigation: `t` TOC · `/` search · `n` notes · `l` listen ·
   `b` bookmark · `j` / `k` paragraph nav · `Esc` close.
 
@@ -37,23 +43,34 @@ images/                        Cover portrait and one tasteful easter-egg image.
 narration/                     Audiobook source kit — plain, SSML, and
                                per-chunk respelled text for any TTS pipeline,
                                plus an ffmpeg assemble script.
-build/                         Reproducible build tooling — parser, narration
-                               generator, reader template, the Kokoro render
-                               pipeline (render_kokoro.py with IPA overrides
-                               for ecclesiastical Latin), and the canonical
-                               structured JSON (build/magnifica.json).
+build/                         Reproducible build tooling — per-language
+                               parser (parse_multilang.py for EN/FR/ES,
+                               parse_encyclical.py for the legacy EN-only
+                               path), narration generator, reader
+                               template, the Kokoro render pipeline
+                               (render_kokoro.py with IPA overrides for
+                               ecclesiastical Latin), and the structured
+                               JSON for each language
+                               (build/magnifica.{en,fr,es}.json).
 vatican-source/                Captured copies of the official Vatican HTML
                                for forensic provenance — see its README.
 ```
 
 ## Rebuilding the reader after editing text or template
 
+The reader embeds all three languages into a single `DOCS = {en, fr, es}`
+object served from one self-contained `index.html`:
+
 ```bash
 python3 -c "import json; t=open('build/reader_template.html').read(); \
-d=json.load(open('build/magnifica.json')); \
+docs={c: json.load(open(f'build/magnifica.{c}.json')) for c in ('en','fr','es')}; \
 open('index.html','w').write(t.replace('__DOC_JSON__', \
-json.dumps(d,ensure_ascii=False,separators=(',',':')).replace('</','<\\/')))"
+json.dumps(docs,ensure_ascii=False)))"
 ```
+
+If you need to re-derive the language JSONs from the upstream Vatican
+markdown, drop the source files in `/tmp/magnifica.{en,fr,es}.md` and
+run `python3 build/parse_multilang.py`.
 
 Regenerate the narration kit after a text change:
 
